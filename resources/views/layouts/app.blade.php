@@ -61,6 +61,15 @@
                                 x-transition:leave-end="opacity-0 scale-95"
                                 @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-50">
+                                
+                                <!-- Menu Kembali ke Dashboard (Khusus Admin) -->
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="/admin/dashboard" class="block px-4 py-2 text-sm text-indigo-600 hover:bg-indigo-50 font-medium">
+                                        <i class="fas fa-home mr-2"></i> Kembali ke Dashboard
+                                    </a>
+                                    <hr class="my-2">
+                                @endif
+                                
                                 <button type="button" onclick="showProfile()"
                                     class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                                     <i class="fas fa-user mr-2"></i> Profil
@@ -111,6 +120,14 @@
             <div id="mobile-menu" class="hidden md:hidden pb-4 border-t">
                 <div class="flex flex-col space-y-2 pt-4">
                     @auth
+                        <!-- Menu Kembali ke Dashboard (Khusus Admin di Mobile) -->
+                        @if(auth()->user()->role === 'admin')
+                            <a href="/admin/dashboard" class="text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg text-sm font-medium">
+                                <i class="fas fa-gauge mr-2"></i> Kembali ke Dashboard
+                            </a>
+                            <hr class="my-2">
+                        @endif
+                        
                         <a href="/profile" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm">
                             <i class="fas fa-user mr-2"></i> Profil
                         </a>

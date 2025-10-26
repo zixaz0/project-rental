@@ -154,8 +154,8 @@ window.addEventListener('resize', () => {
             </a>
 
             <!-- Kendaraan -->
-            <a href="#" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            <a href="{{ route('admin.kendaraan.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.kendaraan.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
                 :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
                 style="transition: all 0.2s ease;">
                 <i class="fas fa-car text-lg"></i>
@@ -164,48 +164,15 @@ window.addEventListener('resize', () => {
                 <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kendaraan</span>
             </a>
 
-            <!-- Pesanan -->
-            <a href="#" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            <!-- Kategori -->
+            <a href="{{ route('admin.kategori.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.kategori.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
                 :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
                 style="transition: all 0.2s ease;">
-                <i class="fas fa-file-invoice text-lg"></i>
+                <i class="fas fa-tags text-lg"></i>
                 <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Pesanan</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Pesanan</span>
-            </a>
-
-            <!-- Pelanggan -->
-            <a href="#" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-users text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Pelanggan</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Pelanggan</span>
-            </a>
-
-            <!-- Laporan Keuangan -->
-            <a href="#" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-chart-line text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Laporan Keuangan</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Laporan Keuangan</span>
-            </a>
-
-            <!-- Pengaturan -->
-            <a href="#" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-gear text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Pengaturan</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Pengaturan</span>
+                    class="ml-3 font-medium text-sm whitespace-nowrap">Kategori</span>
+                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kategori</span>
             </a>
         </nav>
 
@@ -270,7 +237,7 @@ window.addEventListener('resize', () => {
                     <!-- User Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="flex items-center gap-2 focus:outline-none hover:bg-gray-100 rounded-lg px-2 py-1 transition-colors">
+                            class="flex items-center gap-2 focus:outline-none hover:bg-gray-100 rounded-lg px-2 py-1 transition-colors cursor-pointer">
                             <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name ?? 'Admin' }}&background=6366f1&color=fff"
                                 alt="avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-gray-200">
                             <span
@@ -466,6 +433,27 @@ window.addEventListener('resize', () => {
                 }
             });
         }
+    </script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                title: 'Berhasil!',
+                text: @json(session('success')),
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                title: 'Gagal!',
+                text: @json(session('error')),
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        @endif
     </script>
 
     @stack('scripts')

@@ -6,25 +6,6 @@
 <!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- Navbar -->
-<nav class="bg-white/90 backdrop-blur-lg shadow-lg sticky top-0 z-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-20">
-            <div class="flex items-center">
-                <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
-                    <img src="{{ asset('images/logo.png') }}" alt="NGABRIDE ONLINE Logo" class="h-24 w-auto transition-all duration-300 group-hover:scale-110 drop-shadow-lg">
-                </a>
-            </div>
-            <div class="flex items-center space-x-6">
-                <a href="{{ route('home') }}" class="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-all duration-300 font-semibold group">
-                    <i class="fas fa-home text-lg group-hover:scale-110 transition-transform"></i>
-                    <span>Home</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>
-
 <!-- Background dengan Gradient & Patterns -->
 <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex items-center justify-center py-16 px-4 relative overflow-hidden">
     <!-- Animated Background Elements -->

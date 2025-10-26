@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KendaraanController;
+use App\Http\Controllers\Admin\KategoriController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +36,11 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Vehicles
-    // Route::resource('vehicles', VehicleController::class);
+    // Kendaraan
+    Route::resource('kendaraan', KendaraanController::class);
+
+    // Kategori
+    Route::resource('kategori', KategoriController::class);
     
     // Orders/Rentals
     // Route::resource('orders', OrderController::class);
