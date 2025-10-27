@@ -10,15 +10,28 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next, string $role): Response
     {
+        // Cek login
         if (!auth()->check()) {
-            return redirect()->route('login');
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu!');
         }
 
+        // Cek role
         if (auth()->user()->role !== $role) {
-            // Kalo bukan role yang sesuai, redirect ke halaman masing-masing
+            // Log attempt (opsional tapi bagus buat security)
+            \Log::warning('Unauthorized access attempt', [
+                'user_id' => auth()->id(),
+                'user_role' => auth()->user()->role,
+                'required_role' => $role,
+                'url' => $request->url()
+            ]);
+
+            // Redirect ke halaman masing-masing + pesan error
             return auth()->user()->role === 'admin' 
                 ? redirect()->route('admin.dashboard')
-                : redirect()->route('home');
+                    ->with('error', 'Anda tidak memiliki akses ke halaman tersebut!')
+                : redirect()->route('home')
+                    ->with('error', 'Akses ditolak! Halaman khusus admin.');
         }
 
         return $next($request);

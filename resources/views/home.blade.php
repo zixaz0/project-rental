@@ -39,7 +39,7 @@
                                         <label class="block text-sm font-medium text-gray-700 mb-2">
                                             Tanggal
                                         </label>
-                                        <input type="date"  value="{{ date('Y-m-d') }}"
+                                        <input type="date" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
                                     </div>
                                     <div>
@@ -57,7 +57,7 @@
                                         Durasi
                                     </label>
                                     <select
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
+                                        class="cursor-pointer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
                                         <option>1 Hari</option>
                                         <option>2 Hari</option>
                                         <option>3 Hari</option>
@@ -146,8 +146,7 @@
                 <div
                     class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-200">
                     <div class="relative h-48">
-                        <img src="{{ asset('images/Sedan.png') }}"alt="Sedan"
-                            class="w-full h-full object-cover">
+                        <img src="{{ asset('images/Sedan.png') }}"alt="Sedan" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/70 to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <h3 class="text-white font-bold text-lg">Sedan</h3>
@@ -160,8 +159,7 @@
                 <div
                     class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-200">
                     <div class="relative h-48">
-                        <img src="{{ asset('images/SUV.png') }}" alt="SUV"
-                            class="w-full h-full object-cover">
+                        <img src="{{ asset('images/SUV.png') }}" alt="SUV" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/70 to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <h3 class="text-white font-bold text-lg">SUV</h3>
@@ -174,8 +172,7 @@
                 <div
                     class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-200">
                     <div class="relative h-48">
-                        <img src="{{ asset('images/MPV.png') }}" alt="MPV"
-                            class="w-full h-full object-cover">
+                        <img src="{{ asset('images/MPV.png') }}" alt="MPV" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/70 to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <h3 class="text-white font-bold text-lg">MPV</h3>
@@ -188,8 +185,7 @@
                 <div
                     class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-200">
                     <div class="relative h-48">
-                        <img src="{{ asset('images/Luxury.png') }}" alt="Luxury"
-                            class="w-full h-full object-cover">
+                        <img src="{{ asset('images/Luxury.png') }}" alt="Luxury" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/70 to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <h3 class="text-white font-bold text-lg">Luxury</h3>
@@ -208,7 +204,8 @@
                 <!-- Column 1 -->
                 <div>
                     <a href="/" class="flex items-center space-x-2">
-                        <img src="{{ asset('images/logo.png') }}" alt="NGABRIDE ONLINE Logo" class="h-12 sm:h-20 md:h-20 w-auto">
+                        <img src="{{ asset('images/logo.png') }}" alt="NGABRIDE ONLINE Logo"
+                            class="h-12 sm:h-20 md:h-20 w-auto">
                     </a>
                     <p class="text-gray-400 text-sm mb-4">
                         Platform rental kendaraan terpercaya untuk perjalanan Anda

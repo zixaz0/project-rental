@@ -34,11 +34,11 @@
                         </label>
                         <select name="kategori" 
                             id="kategori"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            class="cursor-pointer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             <option value="">Semua Kategori</option>
-                            @foreach($kategori as $kategori)
-                                <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
-                                    {{ $kategori->nama }}
+                            @foreach($kategori as $kat)
+                                <option value="{{ $kat->id }}" {{ request('kategori') == $kat->id ? 'selected' : '' }}>
+                                    {{ $kat->nama }}
                                 </option>
                             @endforeach
                         </select>
@@ -51,11 +51,10 @@
                         </label>
                         <select name="transmisi" 
                             id="transmisi"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            class="cursor-pointer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             <option value="">Semua Transmisi</option>
                             <option value="Manual" {{ request('transmisi') == 'Manual' ? 'selected' : '' }}>Manual</option>
                             <option value="Automatic" {{ request('transmisi') == 'Automatic' ? 'selected' : '' }}>Automatic</option>
-                            <option value="CVT" {{ request('transmisi') == 'CVT' ? 'selected' : '' }}>CVT</option>
                         </select>
                     </div>
                 </div>
@@ -146,7 +145,7 @@
                                 <i class="far fa-calendar-alt text-gray-400 mr-1"></i>
                                 {{ $item->tahun }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
                                 Rp {{ number_format($item->harga->harga_per_hari ?? 0, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -196,7 +195,7 @@
                                     @endphp
                                     <button type="button"
                                         onclick='showDetail(@json($detailData))'
-                                        class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-md transition duration-150"
+                                        class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md transition duration-150"
                                         title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </button>

@@ -19,7 +19,7 @@
 
         <!-- Form Card -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 border-b border-indigo-700">
+            <div class="px-6 py-4 bg-gradient-to-r from-yellow-600 to-yellow-700 border-b border-indigo-700">
                 <h3 class="text-lg font-semibold text-white">
                     <i class="fas fa-edit mr-2"></i>
                     Form Edit Kendaraan

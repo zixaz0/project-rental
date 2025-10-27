@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -174,6 +173,17 @@ window.addEventListener('resize', () => {
                     class="ml-3 font-medium text-sm whitespace-nowrap">Kategori</span>
                 <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kategori</span>
             </a>
+
+            <!-- Harga -->
+            <a href="{{ route('admin.harga.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.harga.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
+                style="transition: all 0.2s ease;">
+                <i class="fas fa-dollar text-lg"></i>
+                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
+                    class="ml-3 font-medium text-sm whitespace-nowrap">Harga</span>
+                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Harga</span>
+            </a>
         </nav>
 
         <!-- Logout Button (Bottom of Sidebar) -->
@@ -265,7 +275,7 @@ window.addEventListener('resize', () => {
 
                             <!-- Profile Button -->
                             <button type="button" onclick="showProfile()"
-                                class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-3">
+                                class="cursor-pointer w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-3">
                                 <i class="fas fa-user w-4"></i>
                                 <span>Profil Saya</span>
                             </button>
@@ -274,7 +284,7 @@ window.addEventListener('resize', () => {
 
                             <!-- Logout Button -->
                             <button type="button" onclick="confirmLogout()"
-                                class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3">
+                                class="cursor-pointer w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3">
                                 <i class="fas fa-sign-out-alt w-4"></i>
                                 <span>Keluar</span>
                             </button>
