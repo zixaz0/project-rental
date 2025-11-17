@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('kategori', function (Blueprint $table) {
             $table->id();
             $table->string('nama'); // Roda Dua, Roda Tiga, Roda Empat, Roda Lima
-            $table->text('deskripsi')->nullable();
+            $table->string('jenis')->nullable();
             $table->timestamps();
         });
     }

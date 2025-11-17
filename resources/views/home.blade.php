@@ -16,7 +16,7 @@
                 <!-- Left Side - Heading -->
                 <div class="text-white lg:w-1/2">
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                        Kemanapun tujuannya,<br>rental mobil<br>#amanbarengNGABRIDE
+                        Kemanapun tujuannya,<br>rental kendaraan<br>#amanbarengNGABRIDE
                     </h1>
                 </div>
 
@@ -32,21 +32,30 @@
                                     class="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-20 h-0.5 bg-indigo-600 rounded-full"></span>
                             </h3>
 
-                            <form class="space-y-4">
+                            <!-- Alert Warning (Hidden by default) -->
+                            <div id="bookingAlert" class="hidden mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
+                                    <span id="alertMessage"></span>
+                                </div>
+                            </div>
+
+                            <form action="{{ route('search') }}" method="GET" class="space-y-4" id="bookingForm">
                                 <!-- Date and Time -->
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">
                                             Tanggal
                                         </label>
-                                        <input type="date" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}"
+                                        <input type="date" name="tanggal" id="bookingDate" value="{{ date('Y-m-d') }}"
+                                            min="{{ date('Y-m-d') }}" required
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">
                                             Jam
                                         </label>
-                                        <input type="time" value="00:00"
+                                        <input type="time" name="jam" id="bookingTime" value="08:00" required
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
                                     </div>
                                 </div>
@@ -56,12 +65,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Durasi
                                     </label>
-                                    <select
+                                    <select name="durasi" required
                                         class="cursor-pointer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm cursor-pointer">
-                                        <option>1 Hari</option>
-                                        <option>2 Hari</option>
-                                        <option>3 Hari</option>
-                                        <option>1 Minggu</option>
+                                        <option value="1">1 Hari</option>
+                                        <option value="2">2 Hari</option>
+                                        <option value="3">3 Hari</option>
+                                        <option value="7">1 Minggu</option>
                                     </select>
                                 </div>
 
@@ -261,4 +270,91 @@
             </div>
         </div>
     </footer>
+
+    <!-- JavaScript for Booking Validation -->
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            const bookingDate = document.getElementById('bookingDate').value;
+            const bookingTime = document.getElementById('bookingTime').value;
+            const alertBox = document.getElementById('bookingAlert');
+            const alertMessage = document.getElementById('alertMessage');
+
+            // Get hour from time input
+            const hour = parseInt(bookingTime.split(':')[0]);
+
+            // Check if time is during closed hours (23:00 - 05:00)
+            if (hour >= 23 || hour < 5) {
+                e.preventDefault();
+                alertBox.classList.remove('hidden');
+                alertMessage.textContent = 'Maaf, rental tutup dari jam 23:00 - 05:00. Silakan pilih jam antara 05:00 - 22:59.';
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(function() {
+                    alertBox.classList.add('hidden');
+                }, 5000);
+                return;
+            }
+
+            // Combine date and time
+            const bookingDateTime = new Date(bookingDate + 'T' + bookingTime);
+            const currentDateTime = new Date();
+
+            // Calculate difference in hours
+            const diffInMs = bookingDateTime - currentDateTime;
+            const diffInHours = diffInMs / (1000 * 60 * 60);
+
+            // Check if booking is less than 12 hours from now
+            if (diffInHours < 12) {
+                e.preventDefault(); // Prevent form submission
+                
+                // Show alert
+                alertBox.classList.remove('hidden');
+                alertMessage.textContent = 'Booking minimal 12 jam sebelum waktu rental. Silakan pilih tanggal dan jam yang lebih jauh dari sekarang.';
+                
+                // Scroll to alert
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Auto hide after 5 seconds
+                setTimeout(function() {
+                    alertBox.classList.add('hidden');
+                }, 5000);
+            } else {
+                // Hide alert if previously shown
+                alertBox.classList.add('hidden');
+            }
+        });
+
+        // Also validate when date/time changes
+        document.getElementById('bookingDate').addEventListener('change', validateBookingTime);
+        document.getElementById('bookingTime').addEventListener('change', validateBookingTime);
+
+        function validateBookingTime() {
+            const bookingDate = document.getElementById('bookingDate').value;
+            const bookingTime = document.getElementById('bookingTime').value;
+            
+            if (bookingDate && bookingTime) {
+                const hour = parseInt(bookingTime.split(':')[0]);
+                const alertBox = document.getElementById('bookingAlert');
+                const alertMessage = document.getElementById('alertMessage');
+
+                // Check closed hours first
+                if (hour >= 23 || hour < 5) {
+                    alertBox.classList.remove('hidden');
+                    alertMessage.textContent = '⚠️ Rental tutup dari jam 23:00 - 05:00. Pilih jam 05:00 - 22:59.';
+                    return;
+                }
+
+                const bookingDateTime = new Date(bookingDate + 'T' + bookingTime);
+                const currentDateTime = new Date();
+                const diffInMs = bookingDateTime - currentDateTime;
+                const diffInHours = diffInMs / (1000 * 60 * 60);
+
+                if (diffInHours < 12 && diffInHours >= 0) {
+                    alertBox.classList.remove('hidden');
+                    alertMessage.textContent = '⚠️ Perhatian: Booking kurang dari 12 jam dari sekarang. Silakan pilih waktu yang lebih jauh.';
+                } else {
+                    alertBox.classList.add('hidden');
+                }
+            }
+        }
+    </script>
 @endsection

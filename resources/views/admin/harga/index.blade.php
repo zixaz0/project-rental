@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
 @section('title', 'Data Harga - Admin')
-
 @section('page-title', 'Data Harga Kendaraan')
-
 @section('page-subtitle', 'Kelola harga dan status kendaraan rental')
 
 @section('content')

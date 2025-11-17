@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
 @section('title', 'Management Kategori - Admin')
-
 @section('page-title', 'Management Kategori')
-
 @section('page-subtitle', 'Kelola semua kategori kendaraan rental Anda')
 
 @section('content')
@@ -27,64 +24,94 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kategori</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="2">Jenis</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($kategori as $item)
+                    @forelse($kategori as $namaKategori => $group)
                         <tr class="hover:bg-gray-50 transition duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <!-- Nomor urut -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                                 {{ $loop->iteration }}
                             </td>
+
+                            <!-- Nama Kategori -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                    <i class="fas fa-tag mr-1"></i>
-                                    {{ $item->nama }}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-indigo-100 text-indigo-800">
+                                    <i class="fas fa-tag mr-2"></i>
+                                    {{ $namaKategori }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-700">
-                                    {{ Str::limit($item->deskripsi, 80) ?? '-' }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <!-- Edit Button -->
-                                    <button type="button"
-                                        onclick="confirmEdit({{ $item->id }}, '{{ $item->nama }}')"
-                                        class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition duration-150"
-                                        title="Edit">
-                                        <i class="fas fa-edit"></i>
+
+                            <!-- Daftar Jenis dengan Dropdown -->
+                            <td class="px-6 py-4" colspan="2">
+                                <div x-data="{ open: false }" class="space-y-2">
+                                    <!-- Trigger Button -->
+                                    <button @click="open = !open"
+                                        class="cursor-pointer inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition group">
+                                        <!-- Ikon caret -->
+                                        <i :class="open ? 'fas fa-caret-down' : 'fas fa-caret-right'"
+                                            class="mr-2 transform transition-transform duration-300"></i>
+                                        <span>{{ $group->count() }} Jenis</span>
                                     </button>
-                                    
-                                    <!-- Delete Button -->
-                                    <form id="delete-form-{{ $item->id }}" 
-                                          action="{{ route('admin.kategori.destroy', $item->id) }}" 
-                                          method="POST" 
-                                          class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button"
-                                                onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
-                                                class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-150"
-                                                title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+
+                                    <!-- List Jenis -->
+                                    <div x-show="open" 
+                                         x-transition:enter="transition ease-out duration-300"
+                                         x-transition:enter-start="opacity-0 -translate-y-2"
+                                         x-transition:enter-end="opacity-100 translate-y-0"
+                                         x-transition:leave="transition ease-in duration-200"
+                                         x-transition:leave-start="opacity-100 translate-y-0"
+                                         x-transition:leave-end="opacity-0 -translate-y-2" 
+                                         class="ml-6 space-y-2 mt-2">
+                                        @foreach ($group as $item)
+                                            <div class="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                                                <span class="text-gray-800 font-medium">{{ $item->jenis }}</span>
+                                                
+                                                <div class="flex items-center gap-2">
+                                                    <!-- Tombol Edit -->
+                                                    <button type="button"
+                                                        onclick="confirmEdit({{ $item->id }}, '{{ $item->nama }}')"
+                                                        class="cursor-pointer group relative flex items-center justify-center w-9 h-9 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-md transition">
+                                                        <i class="fas fa-edit text-sm"></i>
+                                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                                            Edit
+                                                        </span>
+                                                    </button>
+
+                                                    <!-- Tombol Hapus -->
+                                                    <form id="delete-form-{{ $item->id }}"
+                                                        action="{{ route('admin.kategori.destroy', $item->id) }}"
+                                                        method="POST" 
+                                                        class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
+                                                            class="cursor-pointer group relative flex items-center justify-center w-9 h-9 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition cursor-pointer">
+                                                            <i class="fas fa-trash text-sm"></i>
+                                                            <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                                                Hapus
+                                                            </span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="4" class="px-6 py-12 text-center">
-                                <div class="flex flex-col items-center justify-center">
-                                    <i class="fas fa-folder-open text-gray-300 text-5xl mb-3"></i>
-                                    <p class="text-gray-500 text-lg">Belum ada kategori</p>
+                                <div class="flex flex-col items-center justify-center space-y-3">
+                                    <i class="fas fa-folder-open text-gray-300 text-6xl"></i>
+                                    <p class="text-gray-500 text-lg font-medium">Belum ada kategori</p>
                                     <a href="{{ route('admin.kategori.create') }}" 
-                                       class="mt-4 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">
-                                        <i class="fas fa-plus mr-2"></i>
-                                        Tambah Kategori Pertama
+                                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Tambah Kategori Pertama</span>
                                     </a>
                                 </div>
                             </td>

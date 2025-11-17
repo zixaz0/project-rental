@@ -13,7 +13,9 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::latest()->get();
+        // Ambil semua kategori dan kelompokkan berdasarkan nama
+        $kategori = Kategori::orderBy('nama')->get()->groupBy('nama');
+
         return view('admin.kategori.index', compact('kategori'));
     }
 
@@ -32,11 +34,13 @@ class KategoriController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'deskripsi' => 'nullable|string|max:500',
+            'jenis' => 'required|string|max:500|unique:kategori,jenis',
         ], [
             'nama.required' => 'Nama kategori wajib diisi',
             'nama.max' => 'Nama kategori maksimal 100 karakter',
-            'deskripsi.max' => 'Deskripsi maksimal 500 karakter',
+            'jenis.required' => 'Jenis kategori wajib diisi',
+            'jenis.max' => 'Jenis maksimal 500 karakter',
+            'jenis.unique' => 'Jenis kategori sudah terdaftar',
         ]);
 
         try {
@@ -75,13 +79,14 @@ class KategoriController extends Controller
     public function update(Request $request, Kategori $kategori)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:100' . $kategori->id,
-            'deskripsi' => 'nullable|string|max:500',
+            'nama' => 'required|string|max:100',
+            'jenis' => 'required|string|max:500|unique:kategori,jenis,' . $kategori->id,
         ], [
             'nama.required' => 'Nama kategori wajib diisi',
-
             'nama.max' => 'Nama kategori maksimal 100 karakter',
-            'deskripsi.max' => 'Deskripsi maksimal 500 karakter',
+            'jenis.required' => 'Jenis kategori wajib diisi',
+            'jenis.max' => 'Jenis maksimal 500 karakter',
+            'jenis.unique' => 'Jenis kategori sudah terdaftar',
         ]);
 
         try {

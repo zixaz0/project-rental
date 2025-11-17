@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 class KendaraanController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Kendaraan::with(['kategori', 'harga']);
+{
+    $query = Kendaraan::with(['kategori', 'harga']);
 
     // Filter Search
     if ($request->filled('search')) {
@@ -26,9 +26,18 @@ class KendaraanController extends Controller
         });
     }
 
-    // Filter Kategori
-    if ($request->filled('kategori')) {
-        $query->where('kategori_id', $request->kategori);
+    // Filter Kategori (by nama kategori)
+    if ($request->filled('kategori_filter')) {
+        $query->whereHas('kategori', function($q) use ($request) {
+            $q->where('nama', $request->kategori_filter);
+        });
+    }
+
+    // Filter Jenis (by jenis kategori)
+    if ($request->filled('jenis')) {
+        $query->whereHas('kategori', function($q) use ($request) {
+            $q->where('jenis', $request->jenis);
+        });
     }
 
     // Filter Transmisi
@@ -40,12 +49,32 @@ class KendaraanController extends Controller
     $kategori = Kategori::all();
 
     return view('admin.kendaraan.index', compact('kendaraan', 'kategori'));
-    }
+}
 
     public function create()
     {
+        // Ambil semua kategori
         $kategori = Kategori::all();
-        return view('admin.kendaraan.create', compact('kategori'));
+        
+        // Ambil nama kategori yang unique (tidak duplikat)
+        $kategoriUnique = Kategori::select('nama')
+            ->distinct()
+            ->orderBy('nama')
+            ->pluck('nama');
+        
+        // Group kategori berdasarkan nama untuk dropdown jenis
+        $kategoriByNama = Kategori::all()
+            ->groupBy('nama')
+            ->map(function($group) {
+                return $group->map(function($item) {
+                    return [
+                        'id' => $item->id,
+                        'jenis' => $item->jenis
+                    ];
+                })->values();
+            });
+        
+        return view('admin.kendaraan.create', compact('kategori', 'kategoriUnique', 'kategoriByNama'));
     }
 
     public function store(Request $request)
@@ -83,9 +112,8 @@ class KendaraanController extends Controller
             'foto.max' => 'Ukuran foto maksimal 2MB',
         ]);
 
-           try {
-        // Upload foto ke storage/app/public/kendaraan
-            if ($request->hasFile('foto')) {
+        try {
+            // Upload foto ke storage/app/public/kendaraan
             if ($request->hasFile('foto')) {
                 $foto = $request->file('foto');
                 $namaFile = time() . '_' . $foto->getClientOriginalName();
@@ -102,44 +130,62 @@ class KendaraanController extends Controller
                 // simpan path relatif ke database
                 $fotoPath = 'uploads/kendaraan/' . $namaFile;
             }
+
+            // Simpan data kendaraan
+            $kendaraan = Kendaraan::create([
+                'kategori_id' => $validated['kategori_id'],
+                'merk' => $validated['merk'],
+                'model' => $validated['model'],
+                'tahun' => $validated['tahun'],
+                'no_plat' => strtoupper($validated['no_plat']),
+                'warna' => $validated['warna'],
+                'transmisi' => $validated['transmisi'],
+                'kapasitas_penumpang' => $validated['kapasitas_penumpang'],
+                'foto' => $fotoPath,
+                'keterangan' => $validated['keterangan'] ?? null,
+            ]);
+
+            return redirect()
+                ->route('admin.kendaraan.index')
+                ->with('success', 'Kendaraan berhasil ditambahkan!');
+
+        } catch (\Exception $e) {
+            // Hapus foto jika ada error
+            if (isset($fotoPath)) {
+                Storage::disk('public')->delete($fotoPath);
+            }
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Gagal menambahkan kendaraan: ' . $e->getMessage());
         }
-
-        // Simpan data kendaraan
-        $kendaraan = Kendaraan::create([
-            'kategori_id' => $validated['kategori_id'],
-            'merk' => $validated['merk'],
-            'model' => $validated['model'],
-            'tahun' => $validated['tahun'],
-            'no_plat' => strtoupper($validated['no_plat']),
-            'warna' => $validated['warna'],
-            'transmisi' => $validated['transmisi'],
-            'kapasitas_penumpang' => $validated['kapasitas_penumpang'],
-            'foto' => $fotoPath,
-            'keterangan' => $validated['keterangan'] ?? null,
-        ]);
-
-        return redirect()
-            ->route('admin.kendaraan.index')
-            ->with('success', 'Kendaraan berhasil ditambahkan!');
-
-    } catch (\Exception $e) {
-        // Hapus foto jika ada error
-        if (isset($fotoPath)) {
-            Storage::disk('public')->delete($fotoPath);
-        }
-
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Gagal menambahkan kendaraan: ' . $e->getMessage());
-    }
     }
 
     public function edit($id)
     {
         $kendaraan = Kendaraan::with('harga')->findOrFail($id);
         $kategori = Kategori::all();
-        return view('admin.kendaraan.edit', compact('kendaraan', 'kategori'));
+        
+        // Ambil nama kategori yang unique (tidak duplikat)
+        $kategoriUnique = Kategori::select('nama')
+            ->distinct()
+            ->orderBy('nama')
+            ->pluck('nama');
+        
+        // Group kategori berdasarkan nama untuk dropdown jenis
+        $kategoriByNama = Kategori::all()
+            ->groupBy('nama')
+            ->map(function($group) {
+                return $group->map(function($item) {
+                    return [
+                        'id' => $item->id,
+                        'jenis' => $item->jenis
+                    ];
+                })->values();
+            });
+        
+        return view('admin.kendaraan.edit', compact('kendaraan', 'kategori', 'kategoriUnique', 'kategoriByNama'));
     }
 
     public function update(Request $request, $id)
@@ -221,6 +267,7 @@ class KendaraanController extends Controller
                 ->with('error', 'Gagal memperbarui kendaraan: ' . $e->getMessage());
         }
     }
+
     public function destroy($id)
     {
         try {

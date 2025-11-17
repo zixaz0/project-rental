@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
 @section('title', 'Data Kendaraan - Admin')
-
 @section('page-title', 'Data Kendaraan')
-
 @section('page-subtitle', 'Kelola semua kendaraan rental Anda')
 
 @section('content')
@@ -11,36 +8,46 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <form action="{{ route('admin.kendaraan.index') }}" method="GET" id="filterForm">
             <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-                <!-- Filter Controls -->
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Filter -->
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                     <!-- Search Bar -->
                     <div>
                         <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-search mr-1"></i>Cari Kendaraan
                         </label>
-                        <input type="text" 
-                            name="search" 
-                            id="search" 
-                            value="{{ request('search') }}"
+                        <input type="text" name="search" id="search" value="{{ request('search') }}"
                             placeholder="Merk, model, no. plat..."
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             autocomplete="off">
                     </div>
 
-                    <!-- Filter Kategori -->
+                    <!-- Filter Kategori (Unique/No Duplicate) -->
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-tag mr-1"></i>Kategori
                         </label>
-                        <select name="kategori" 
-                            id="kategori"
+                        <select name="kategori_filter" id="kategori_filter"
                             class="cursor-pointer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             <option value="">Semua Kategori</option>
-                            @foreach($kategori as $kat)
-                                <option value="{{ $kat->id }}" {{ request('kategori') == $kat->id ? 'selected' : '' }}>
+                            @foreach ($kategori->unique('nama')->sortBy('nama') as $kat)
+                                <option value="{{ $kat->nama }}"
+                                    {{ request('kategori_filter') == $kat->nama ? 'selected' : '' }}>
                                     {{ $kat->nama }}
                                 </option>
                             @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filter Jenis (Muncul berdasarkan Kategori) -->
+                    <div>
+                        <label for="jenis" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-list mr-1"></i>Jenis
+                        </label>
+                        <select name="jenis" id="jenis"
+                            class="cursor-pointer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                            {{ !request('kategori_filter') ? 'disabled' : '' }}>
+                            <option value="">Pilih Kategori Dulu</option>
+                            <!-- Opsi jenis akan diisi via JavaScript -->
                         </select>
                     </div>
 
@@ -49,19 +56,19 @@
                         <label for="transmisi" class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-cog mr-1"></i>Transmisi
                         </label>
-                        <select name="transmisi" 
-                            id="transmisi"
+                        <select name="transmisi" id="transmisi"
                             class="cursor-pointer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             <option value="">Semua Transmisi</option>
                             <option value="Manual" {{ request('transmisi') == 'Manual' ? 'selected' : '' }}>Manual</option>
-                            <option value="Automatic" {{ request('transmisi') == 'Automatic' ? 'selected' : '' }}>Automatic</option>
+                            <option value="Automatic" {{ request('transmisi') == 'Automatic' ? 'selected' : '' }}>Automatic
+                            </option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex flex-wrap items-end gap-2">
-                    <a href="{{ route('admin.kendaraan.index') }}" 
+                    <a href="{{ route('admin.kendaraan.index') }}"
                         class="inline-flex items-center px-4 py-2 {{ request()->hasAny(['search', 'kategori', 'transmisi']) ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 hover:bg-gray-500' }} text-white rounded-lg transition duration-150">
                         <i class="fas fa-times mr-2"></i>
                         Clear Filter
@@ -190,11 +197,10 @@
                                             'harga' => number_format($item->harga->harga_per_hari ?? 0, 0, ',', '.'),
                                             'status' => ucfirst(str_replace('_', ' ', $status)),
                                             'foto' => $item->foto ? asset($item->foto) : asset('images/no-image.png'),
-                                            'keterangan' => $item->keterangan ?? 'Tidak ada keterangan'
+                                            'keterangan' => $item->keterangan ?? 'Tidak ada keterangan',
                                         ];
                                     @endphp
-                                    <button type="button"
-                                        onclick='showDetail(@json($detailData))'
+                                    <button type="button" onclick='showDetail(@json($detailData))'
                                         class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md transition duration-150"
                                         title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
@@ -205,9 +211,8 @@
                                         title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <form id="delete-form-{{ $item->id }}" 
-                                        action="{{ route('admin.kendaraan.destroy', $item->id) }}" 
-                                        method="POST"
+                                    <form id="delete-form-{{ $item->id }}"
+                                        action="{{ route('admin.kendaraan.destroy', $item->id) }}" method="POST"
                                         class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -485,6 +490,65 @@
                 }
             });
         }
+    </script>
+    <script>
+        // Data kategori dan jenis dari backend
+        const kategoriJenisData = @json(
+            $kategori->groupBy('nama')->map(function ($items) {
+                return $items->pluck('jenis', 'id')->unique();
+            }));
+
+        const kategoriFilter = document.getElementById('kategori_filter');
+        const jenisSelect = document.getElementById('jenis');
+        const filterForm = document.getElementById('filterForm');
+
+        // Handle perubahan kategori
+        kategoriFilter.addEventListener('change', function() {
+            const selectedKategori = this.value;
+
+            // Reset dropdown jenis
+            jenisSelect.innerHTML = '<option value="">Pilih Jenis</option>';
+
+            if (selectedKategori === '') {
+                jenisSelect.disabled = true;
+                jenisSelect.innerHTML = '<option value="">Pilih Kategori Dulu</option>';
+            } else {
+                jenisSelect.disabled = false;
+
+                // Populate jenis berdasarkan kategori
+                if (kategoriJenisData[selectedKategori]) {
+                    const jenisOptions = kategoriJenisData[selectedKategori];
+
+                    Object.entries(jenisOptions).forEach(([id, jenis]) => {
+                        const option = document.createElement('option');
+                        option.value = jenis;
+                        option.textContent = jenis;
+
+                        // Set selected jika sesuai dengan request
+                        if (jenis === '{{ request('jenis') }}') {
+                            option.selected = true;
+                        }
+
+                        jenisSelect.appendChild(option);
+                    });
+                }
+            }
+        });
+
+        // Auto submit saat jenis berubah
+        jenisSelect.addEventListener('change', function() {
+            filterForm.submit();
+        });
+
+        // Trigger load jenis saat halaman pertama kali dimuat (jika ada filter aktif)
+        if (kategoriFilter.value !== '') {
+            kategoriFilter.dispatchEvent(new Event('change'));
+        }
+
+        // Update event listener transmisi yang sudah ada
+        document.getElementById('transmisi').addEventListener('change', function() {
+            filterForm.submit();
+        });
     </script>
 
     <style>

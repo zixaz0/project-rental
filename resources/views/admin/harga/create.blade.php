@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
 @section('title', 'Tambah Harga - Admin')
-
 @section('page-title', 'Tambah Harga Kendaraan')
-
 @section('page-subtitle', 'Tambahkan harga baru untuk kendaraan')
 
 @section('content')

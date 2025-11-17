@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,12 +108,12 @@ window.addEventListener('resize', () => {
     }
 });">
 
-    <!-- Mobile Overlay -->
+    <!-- Mobile Overlay - GANTI BAGIAN INI -->
     <div x-show="mobileMenuOpen" x-transition:enter="transition-opacity ease-linear duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0" @click="closeMobileMenu()"
-        class="fixed inset-0 bg-gray-900 bg-opacity-75 z-30 md:hidden" x-cloak>
+        class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden" x-cloak>
     </div>
 
     <!-- Sidebar -->
@@ -237,11 +238,11 @@ window.addEventListener('resize', () => {
                         <i class="fas fa-globe text-base md:text-lg"></i>
                     </button>
 
-                    <!-- View Website -->
+                    <!-- View Website - Tampil di semua ukuran layar -->
                     <a href="{{ route('home') }}" target="_blank"
-                        class="hidden md:flex items-center space-x-2 text-gray-600 hover:text-indigo-600 text-sm font-medium transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
+                        class="flex items-center space-x-2 text-gray-600 hover:text-indigo-600 text-sm font-medium transition-colors px-3 py-2 rounded-lg hover:bg-gray-100">
                         <i class="fas fa-external-link-alt"></i>
-                        <span>Lihat Website</span>
+                        <span class="hidden sm:inline">Lihat Website</span>
                     </a>
 
                     <!-- User Dropdown -->

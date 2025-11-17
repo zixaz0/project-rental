@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-
 @section('title', 'Admin Dashboard - NGABRIDE ONLINE')
 @section('page-title', 'Dashboard')
 @section('page-subtitle', 'Selamat datang kembali, Admin!')

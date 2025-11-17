@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
 @section('title', 'Tambah Kendaraan - Admin')
-
 @section('page-title', 'Tambah Kendaraan')
-
 @section('page-subtitle', 'Tambahkan kendaraan baru ke dalam sistem')
 
 @section('content')
@@ -32,27 +29,48 @@
                 class="p-6 space-y-6">
                 @csrf
 
-                <!-- Kategori -->
-                <div>
-                    <label for="kategori_id" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Kategori Kendaraan <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <i class="fas fa-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                        <select name="kategori_id" id="kategori_id"
-                            class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('kategori_id') border-red-500 @enderror"
-                            required>
-                            <option value="">-- Pilih Kategori --</option>
-                            @foreach ($kategori as $kat)
-                                <option value="{{ $kat->id }}" {{ old('kategori_id') == $kat->id ? 'selected' : '' }}>
-                                    {{ $kat->nama }}
-                                </option>
-                            @endforeach
-                        </select>
+                <!-- Kategori & Jenis (Side by Side) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Kategori -->
+                    <div>
+                        <label for="kategori_nama" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Kategori Kendaraan <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <i class="fas fa-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select name="kategori_nama" id="kategori_nama" onchange="loadJenis()"
+                                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('kategori_id') border-red-500 @enderror"
+                                required>
+                                <option value="">-- Pilih Kategori --</option>
+                                @foreach ($kategoriUnique as $nama)
+                                    <option value="{{ $nama }}" {{ old('kategori_nama') == $nama ? 'selected' : '' }}>
+                                        {{ $nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('kategori_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
-                    @error('kategori_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+
+                    <!-- Jenis (Dynamically Loaded) -->
+                    <div>
+                        <label for="kategori_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Jenis Kendaraan <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select name="kategori_id" id="kategori_id"
+                                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50 @error('kategori_id') border-red-500 @enderror"
+                                required disabled>
+                                <option value="">-- Pilih Kategori Dulu --</option>
+                            </select>
+                        </div>
+                        @error('kategori_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Merk & Model -->
@@ -259,6 +277,36 @@
 
     @push('scripts')
         <script>
+            // Data kategori dari backend
+            const kategoriData = @json($kategoriByNama);
+
+            // Load jenis berdasarkan kategori yang dipilih
+            function loadJenis() {
+                const kategoriNama = document.getElementById('kategori_nama').value;
+                const jenisSelect = document.getElementById('kategori_id');
+                
+                // Reset dropdown jenis
+                jenisSelect.innerHTML = '<option value="">-- Pilih Jenis --</option>';
+                
+                if (kategoriNama && kategoriData[kategoriNama]) {
+                    // Enable dropdown jenis
+                    jenisSelect.disabled = false;
+                    jenisSelect.classList.remove('bg-gray-50');
+                    
+                    // Populate jenis options
+                    kategoriData[kategoriNama].forEach(function(item) {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.jenis;
+                        jenisSelect.appendChild(option);
+                    });
+                } else {
+                    // Disable dropdown jenis
+                    jenisSelect.disabled = true;
+                    jenisSelect.classList.add('bg-gray-50');
+                }
+            }
+
             // Preview image before upload
             function previewImage(event) {
                 const file = event.target.files[0];
@@ -279,6 +327,20 @@
             document.getElementById('no_plat').addEventListener('input', function(e) {
                 e.target.value = e.target.value.toUpperCase();
             });
+
+            // Restore old values jika ada error validation
+            @if(old('kategori_nama'))
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('kategori_nama').value = '{{ old('kategori_nama') }}';
+                    loadJenis();
+                    
+                    @if(old('kategori_id'))
+                        setTimeout(function() {
+                            document.getElementById('kategori_id').value = '{{ old('kategori_id') }}';
+                        }, 100);
+                    @endif
+                });
+            @endif
 
             // Show validation errors with SweetAlert
             @if ($errors->any())
