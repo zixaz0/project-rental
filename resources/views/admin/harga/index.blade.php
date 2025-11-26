@@ -210,7 +210,7 @@
                                         ];
                                     @endphp
                                     <button type="button" onclick='showDetail(@json($detailData))'
-                                        class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-indigo run bu-500 hover:bg-indigo-600 text-white rounded-md transition duration-150"
+                                        class="cursor-pointer inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md transition duration-150"
                                         title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </button>

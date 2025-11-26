@@ -161,10 +161,10 @@
                                                         Rp {{ number_format($kendaraan->harga->harga_per_hari, 0, ',', '.') }}
                                                     </div>
                                                     <div class="text-sm text-gray-600">/ Hari</div>
-                                                    <a href="', $kendaraan->id) }}" 
+                                                    <button type="button" onclick="checkUserStatus({{ $kendaraan->id }})"
                                                         class="mt-4 inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-lg">
                                                         Pesan
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -189,6 +189,9 @@
         </div>
     </div>
 
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function updatePriceLabel() {
             const priceRange = document.getElementById('priceRange');
@@ -200,6 +203,47 @@
         function setKapasitas(value) {
             document.getElementById('kapasitasInput').value = value;
             document.getElementById('filterForm').submit();
+        }
+
+        function checkUserStatus(kendaraanId) {
+            @auth
+                @if(Auth::user()->is_complete)
+                    // User sudah lengkap, lanjut ke halaman booking
+                    window.location.href = `/booking/${kendaraanId}`;
+                @else
+                    // User belum lengkap data
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Data Belum Lengkap',
+                        html: 'Anda harus melengkapi data diri terlebih dahulu sebelum melakukan pemesanan.<br><br>Silakan lengkapi data diri Anda.',
+                        showCancelButton: true,
+                        confirmButtonText: 'Lengkapi Sekarang',
+                        cancelButtonText: 'Nanti',
+                        confirmButtonColor: '#2563eb',
+                        cancelButtonColor: '#6b7280'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '{{ route('profile.complete') }}';
+                        }
+                    });
+                @endif
+            @else
+                // User belum login
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Login Terlebih Dahulu',
+                    text: 'Anda harus login terlebih dahulu untuk melakukan pemesanan.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#2563eb',
+                    cancelButtonColor: '#6b7280'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route('login') }}';
+                    }
+                });
+            @endauth
         }
     </script>
 @endsection

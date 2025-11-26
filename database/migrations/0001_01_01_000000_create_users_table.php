@@ -15,8 +15,28 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'customer'])->default('customer');
+            
+            // Data Kontak
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
+            
+            // Data Identitas (untuk customer yang mau sewa)
+            $table->string('nik', 16)->nullable()->unique(); // NIK KTP
+            $table->date('tanggal_lahir')->nullable();
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
+            
+            // Upload Dokumen
+            $table->string('foto_ktp')->nullable(); // Path file foto KTP
+            $table->string('foto_selfie_ktp')->nullable(); // Path file selfie with KTP
+            $table->string('foto_sim')->nullable(); // Path file SIM (opsional)
+            
+            // Status Verifikasi
+            $table->boolean('is_complete')->default(false); // Data sudah lengkap?
+            $table->boolean('is_verified')->default(false); // Sudah diverifikasi admin?
+            $table->timestamp('verified_at')->nullable(); // Kapan diverifikasi
+            $table->foreignId('verified_by')->nullable()->constrained('users')->onDelete('set null'); // Admin yang verifikasi
+            $table->text('verification_note')->nullable(); // Catatan dari admin
+            
             $table->rememberToken();
             $table->timestamps();
         });
