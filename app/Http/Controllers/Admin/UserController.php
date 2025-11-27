@@ -15,7 +15,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        // Query builder dengan filter role owner
+        $query = User::query()->where('role', '!=', 'owner');
 
         // Search
         if ($request->filled('search')) {
@@ -38,7 +39,7 @@ class UserController extends Controller
             $query->where('jenis_kelamin', $request->gender);
         }
 
-        // Filter by Status (UPDATED)
+        // Filter by Status
         if ($request->filled('verification_status')) {
             $query->where('status', $request->verification_status);
         }
@@ -49,12 +50,16 @@ class UserController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        // Calculate statistics (UPDATED)
-        $totalUsers = User::count();
-        $verifiedUsers = User::where('status', 'terverifikasi')->count();
-        $pendingUsers = User::where('status', 'menunggu_verifikasi')->count();
-        $incompleteUsers = User::where('status', 'belum_lengkap')->count();
-        $rejectedUsers = User::where('status', 'ditolak')->count();
+        // Calculate statistics (exclude owner)
+        $totalUsers = User::where('role', '!=', 'owner')->count();
+        $verifiedUsers = User::where('role', '!=', 'owner')
+            ->where('status', 'terverifikasi')->count();
+        $pendingUsers = User::where('role', '!=', 'owner')
+            ->where('status', 'menunggu_verifikasi')->count();
+        $incompleteUsers = User::where('role', '!=', 'owner')
+            ->where('status', 'belum_lengkap')->count();
+        $rejectedUsers = User::where('role', '!=', 'owner')
+            ->where('status', 'ditolak')->count();
 
         return view('admin.users.index', compact(
             'users',
@@ -123,7 +128,6 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User tidak dalam status menunggu verifikasi!');
         }
 
-        // PERBAIKAN: TIDAK HAPUS DOKUMEN, biarkan user edit sendiri
         // Update status ke ditolak, dokumen tetap ada
         $user->update([
             'status' => 'ditolak',
@@ -174,6 +178,11 @@ class UserController extends Controller
         // Prevent deleting self
         if ($user->id === Auth::id()) {
             return redirect()->back()->with('error', 'Tidak dapat menghapus akun sendiri!');
+        }
+
+        // Prevent deleting owner
+        if ($user->role === 'owner') {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus akun owner!');
         }
 
         // Delete user documents if exists

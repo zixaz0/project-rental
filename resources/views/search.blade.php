@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Rental Harian</h2>
-                
+
                 <div class="flex flex-wrap items-center gap-4 text-sm">
                     <div class="flex items-center">
                         <i class="far fa-calendar mr-2 text-gray-600"></i>
@@ -65,20 +65,22 @@
                         <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-lg font-bold text-gray-900">Filter</h3>
-                                <a href="{{ route('search') }}" class="text-blue-600 text-sm font-medium hover:text-blue-700">Reset</a>
+                                <a href="{{ route('search') }}"
+                                    class="text-blue-600 text-sm font-medium hover:text-blue-700">Reset</a>
                             </div>
 
                             <!-- Price Filter -->
                             <div class="mb-6">
                                 <h4 class="font-semibold text-gray-900 mb-4">Harga</h4>
                                 <div class="space-y-3">
-                                    <input type="range" name="harga_max" id="priceRange" min="0" max="4000000" 
-                                        value="{{ request('harga_max', 4000000) }}" 
+                                    <input type="range" name="harga_max" id="priceRange" min="0" max="4000000"
+                                        value="{{ request('harga_max', 4000000) }}"
                                         class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                                         onchange="updatePriceLabel(); document.getElementById('filterForm').submit();">
                                     <div class="flex justify-between text-sm text-gray-600">
                                         <span>Rp 0</span>
-                                        <span id="maxPriceLabel">Rp {{ number_format(request('harga_max', 4000000), 0, ',', '.') }}</span>
+                                        <span id="maxPriceLabel">Rp
+                                            {{ number_format(request('harga_max', 4000000), 0, ',', '.') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -87,20 +89,21 @@
                             <div>
                                 <h4 class="font-semibold text-gray-900 mb-4">Kapasitas penumpang</h4>
                                 <div class="flex gap-2">
-                                    <button type="button" onclick="setKapasitas('4')" 
+                                    <button type="button" onclick="setKapasitas('4')"
                                         class="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg text-sm hover:border-blue-600 hover:text-blue-600 transition {{ request('kapasitas') == '4' ? 'border-blue-600 text-blue-600 bg-blue-50' : '' }}">
                                         4 Kursi
                                     </button>
-                                    <button type="button" onclick="setKapasitas('5-6')" 
+                                    <button type="button" onclick="setKapasitas('5-6')"
                                         class="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg text-sm hover:border-blue-600 hover:text-blue-600 transition {{ request('kapasitas') == '5-6' ? 'border-blue-600 text-blue-600 bg-blue-50' : '' }}">
                                         5-6 Kursi
                                     </button>
-                                    <button type="button" onclick="setKapasitas('>6')" 
+                                    <button type="button" onclick="setKapasitas('>6')"
                                         class="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg text-sm hover:border-blue-600 hover:text-blue-600 transition {{ request('kapasitas') == '>6' ? 'border-blue-600 text-blue-600 bg-blue-50' : '' }}">
                                         >6 Kursi
                                     </button>
                                 </div>
-                                <input type="hidden" name="kapasitas" id="kapasitasInput" value="{{ request('kapasitas') }}">
+                                <input type="hidden" name="kapasitas" id="kapasitasInput"
+                                    value="{{ request('kapasitas') }}">
                             </div>
                         </div>
                     </div>
@@ -111,11 +114,15 @@
                             <div>
                                 <h2 class="text-xl font-bold text-gray-900">Urutkan</h2>
                             </div>
-                            <select name="sort" class="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            <select name="sort"
+                                class="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 onchange="document.getElementById('filterForm').submit();">
-                                <option value="harga_terendah" {{ request('sort') == 'harga_terendah' ? 'selected' : '' }}>Harga terendah</option>
-                                <option value="harga_tertinggi" {{ request('sort') == 'harga_tertinggi' ? 'selected' : '' }}>Harga tertinggi</option>
-                                <option value="terpopuler" {{ request('sort') == 'terpopuler' ? 'selected' : '' }}>Terpopuler</option>
+                                <option value="harga_terendah" {{ request('sort') == 'harga_terendah' ? 'selected' : '' }}>
+                                    Harga terendah</option>
+                                <option value="harga_tertinggi"
+                                    {{ request('sort') == 'harga_tertinggi' ? 'selected' : '' }}>Harga tertinggi</option>
+                                <option value="terpopuler" {{ request('sort') == 'terpopuler' ? 'selected' : '' }}>
+                                    Terpopuler</option>
                             </select>
                         </div>
 
@@ -129,14 +136,15 @@
                                 <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition">
                                     <div class="flex flex-col md:flex-row">
                                         <div class="md:w-64 h-48 md:h-auto bg-gray-100">
-                                            <img src="{{ asset($kendaraan->foto) }}" 
-                                                alt="{{ $kendaraan->merk }} {{ $kendaraan->model }}" 
+                                            <img src="{{ asset($kendaraan->foto) }}"
+                                                alt="{{ $kendaraan->merk }} {{ $kendaraan->model }}"
                                                 class="w-full h-full object-contain p-4">
                                         </div>
                                         <div class="flex-1 p-6">
                                             <div class="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ strtoupper($kendaraan->merk . ' ' . $kendaraan->model) }}</h3>
+                                                    <h3 class="text-xl font-bold text-gray-900 mb-2">
+                                                        {{ strtoupper($kendaraan->merk . ' ' . $kendaraan->model) }}</h3>
                                                     <div class="flex flex-wrap gap-4 text-sm text-gray-600">
                                                         <div class="flex items-center">
                                                             <i class="fas fa-users mr-2"></i>
@@ -153,12 +161,14 @@
                                                     </div>
                                                     <div class="mt-3 flex items-center text-sm text-green-600">
                                                         <i class="fas fa-check-circle mr-2"></i>
-                                                        <span>Tahun {{ $kendaraan->tahun }} - {{ $kendaraan->warna }}</span>
+                                                        <span>Tahun {{ $kendaraan->tahun }} -
+                                                            {{ $kendaraan->warna }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="text-right">
                                                     <div class="text-2xl font-bold text-orange-600">
-                                                        Rp {{ number_format($kendaraan->harga->harga_per_hari, 0, ',', '.') }}
+                                                        Rp
+                                                        {{ number_format($kendaraan->harga->harga_per_hari, 0, ',', '.') }}
                                                     </div>
                                                     <div class="text-sm text-gray-600">/ Hari</div>
                                                     <button type="button" onclick="checkUserStatus({{ $kendaraan->id }})"
@@ -206,44 +216,59 @@
         }
 
         function checkUserStatus(kendaraanId) {
+            // Ambil parameter dari hidden input di form
+            const tanggal = document.querySelector('input[name="tanggal"]').value;
+            const jam = document.querySelector('input[name="jam"]').value;
+            const durasi = document.querySelector('input[name="durasi"]').value;
+
             @auth
-                @if(Auth::user()->is_complete)
-                    // User sudah lengkap, lanjut ke halaman booking
-                    window.location.href = `/booking/${kendaraanId}`;
-                @else
-                    // User belum lengkap data
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Data Belum Lengkap',
-                        html: 'Anda harus melengkapi data diri terlebih dahulu sebelum melakukan pemesanan.<br><br>Silakan lengkapi data diri Anda.',
-                        showCancelButton: true,
-                        confirmButtonText: 'Lengkapi Sekarang',
-                        cancelButtonText: 'Nanti',
-                        confirmButtonColor: '#2563eb',
-                        cancelButtonColor: '#6b7280'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '{{ route('profile.complete') }}';
-                        }
-                    });
-                @endif
-            @else
-                // User belum login
+            @if (!Auth::user()->is_complete)
+                // User belum lengkap data
                 Swal.fire({
-                    icon: 'info',
-                    title: 'Login Terlebih Dahulu',
-                    text: 'Anda harus login terlebih dahulu untuk melakukan pemesanan.',
+                    icon: 'warning',
+                    title: 'Data Belum Lengkap',
+                    html: 'Anda harus melengkapi data diri terlebih dahulu sebelum melakukan pemesanan.<br><br>Silakan lengkapi data diri Anda.',
                     showCancelButton: true,
-                    confirmButtonText: 'Login',
-                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Lengkapi Sekarang',
+                    cancelButtonText: 'Nanti',
                     confirmButtonColor: '#2563eb',
                     cancelButtonColor: '#6b7280'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '{{ route('login') }}';
+                        window.location.href = '{{ route('profile.complete') }}';
                     }
                 });
-            @endauth
+            @elseif (!Auth::user()->is_verified)
+                // User belum diverifikasi admin
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Menunggu Verifikasi',
+                    html: 'Akun Anda sedang dalam proses verifikasi oleh admin.<br><br>Anda akan dapat melakukan pemesanan setelah akun Anda diverifikasi.<br><br><b>Mohon tunggu, kami akan segera memverifikasi akun Anda!</b>',
+                    confirmButtonText: 'Mengerti',
+                    confirmButtonColor: '#2563eb',
+                    allowOutsideClick: false
+                });
+            @else
+                // User sudah lengkap dan terverifikasi, lanjut ke halaman booking dengan parameter
+                window.location.href = `/booking/${kendaraanId}?tanggal=${tanggal}&jam=${jam}&durasi=${durasi}`;
+            @endif
+        @else
+            // User belum login
+            Swal.fire({
+                icon: 'info',
+                title: 'Login Terlebih Dahulu',
+                text: 'Anda harus login terlebih dahulu untuk melakukan pemesanan.',
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ route('login') }}';
+                }
+            });
+        @endauth
         }
     </script>
 @endsection

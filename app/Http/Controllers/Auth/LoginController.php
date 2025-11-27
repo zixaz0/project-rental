@@ -24,9 +24,14 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // Redirect berdasarkan role
+            if (auth()->user()->isOwner()) {
+                return redirect()->intended(route('owner.dashboard'));
+            }
+            
             if (auth()->user()->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'));
             }
+            
 
             // Customer tetap di home (marketplace)
             return redirect()->intended(route('home'));

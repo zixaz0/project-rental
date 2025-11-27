@@ -26,12 +26,19 @@ class CheckRole
                 'url' => $request->url()
             ]);
 
-            // Redirect ke halaman masing-masing + pesan error
-            return auth()->user()->role === 'admin' 
-                ? redirect()->route('admin.dashboard')
-                    ->with('error', 'Anda tidak memiliki akses ke halaman tersebut!')
-                : redirect()->route('home')
-                    ->with('error', 'Akses ditolak! Halaman khusus admin.');
+            // Redirect berdasarkan role user
+            $userRole = auth()->user()->role;
+            
+            if ($userRole === 'owner') {
+                return redirect()->route('owner.dashboard')
+                    ->with('error', 'Anda tidak memiliki akses ke halaman tersebut!');
+            } elseif ($userRole === 'admin') {
+                return redirect()->route('admin.dashboard')
+                    ->with('error', 'Anda tidak memiliki akses ke halaman tersebut!');
+            } else {
+                return redirect()->route('home')
+                    ->with('error', 'Akses ditolak! Anda tidak memiliki izin untuk mengakses halaman ini.');
+            }
         }
 
         return $next($request);

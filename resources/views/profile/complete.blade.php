@@ -55,7 +55,7 @@
         @endif
 
         <!-- Form -->
-        <form action="{{ route('profile.store.complete') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+        <form action="{{ route('profile.store.complete') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-sm p-4 sm:p-6" id="completeForm">
             @csrf
 
             <!-- Data Kontak -->
@@ -71,7 +71,6 @@
                         <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
                         <input type="text" value="{{ $user->name }}" disabled
                             class="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border border-gray-300 rounded-lg bg-gray-100 text-gray-600">
-                        <p class="mt-1.5 text-xs text-gray-500">Edit di halaman profil</p>
                     </div>
 
                     <!-- Email (readonly) -->
@@ -79,7 +78,6 @@
                         <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input type="email" value="{{ $user->email }}" disabled
                             class="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border border-gray-300 rounded-lg bg-gray-100 text-gray-600">
-                        <p class="mt-1.5 text-xs text-gray-500">Edit di halaman profil</p>
                     </div>
 
                     <!-- No. Telepon -->
@@ -191,7 +189,7 @@
                         
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                             <label class="cursor-pointer flex-shrink-0">
-                                <input type="file" name="foto_ktp" accept="image/*" class="hidden" id="foto_ktp" onchange="previewImage(this, 'preview_ktp')" required>
+                                <input type="file" name="foto_ktp" accept="image/*" class="hidden" id="foto_ktp" onchange="previewImage(this, 'preview_ktp')">
                                 <div class="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium text-center sm:text-left">
                                     <i class="fas fa-upload mr-2"></i>Pilih File
                                 </div>
@@ -223,7 +221,7 @@
                         
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                             <label class="cursor-pointer flex-shrink-0">
-                                <input type="file" name="foto_selfie_ktp" accept="image/*" class="hidden" id="foto_selfie_ktp" onchange="previewImage(this, 'preview_selfie')" required>
+                                <input type="file" name="foto_selfie_ktp" accept="image/*" class="hidden" id="foto_selfie_ktp" onchange="previewImage(this, 'preview_selfie')">
                                 <div class="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium text-center sm:text-left">
                                     <i class="fas fa-upload mr-2"></i>Pilih File
                                 </div>
@@ -243,7 +241,7 @@
                     <!-- Foto SIM -->
                     <div>
                         <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                            Foto SIM <span class="text-gray-400 text-xs">(Opsional)</span>
+                            Foto SIM <span class="text-red-500">*</span>
                         </label>
                         
                         @if($user->foto_sim)
@@ -256,7 +254,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                             <label class="cursor-pointer flex-shrink-0">
                                 <input type="file" name="foto_sim" accept="image/*" class="hidden" id="foto_sim" onchange="previewImage(this, 'preview_sim')">
-                                <div class="px-4 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm font-medium text-center sm:text-left">
+                                <div class="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium text-center sm:text-left">
                                     <i class="fas fa-upload mr-2"></i>Pilih File
                                 </div>
                             </label>
@@ -269,7 +267,7 @@
                         @error('foto_sim')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                         @enderror
-                        <p class="mt-1.5 text-xs text-gray-500">Dapat mempercepat verifikasi.</p>
+                        <p class="mt-1.5 text-xs text-gray-500">JPG/PNG, max 2MB. Pastikan jelas.</p>
                     </div>
                 </div>
             </div>
@@ -304,41 +302,16 @@
 
             <!-- Buttons -->
             <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6 border-t">
-                <a href="{{ route('home') }}" class="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center text-sm font-medium">
+                <a href="{{ route('profile.show') }}" class="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center text-sm font-medium">
                     <i class="fas fa-arrow-left mr-2"></i>Batal
                 </a>
-                <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center text-sm font-medium">
+                <button type="submit" id="submitBtn" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-center text-sm font-medium">
                     <i class="fas fa-paper-plane mr-2"></i>Kirim untuk Verifikasi
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<!-- SweetAlert -->
-@if(session('success'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        confirmButtonColor: '#2563eb'
-    });
-</script>
-@endif
-
-@if(session('error'))
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: '{{ session('error') }}',
-        confirmButtonColor: '#dc2626'
-    });
-</script>
-@endif
 
 <script>
 function previewImage(input, previewId) {
@@ -390,5 +363,53 @@ function previewImage(input, previewId) {
         preview.classList.add('hidden');
     }
 }
+
+// Validasi form sebelum submit
+document.getElementById('completeForm').addEventListener('submit', function(e) {
+    const fotoKtp = document.getElementById('foto_ktp');
+    const fotoSelfie = document.getElementById('foto_selfie_ktp');
+    const fotoSim = document.getElementById('foto_sim');
+    
+    // Cek jika user belum punya foto sebelumnya dan belum upload baru
+    const hasOldKtp = {{ $user->foto_ktp ? 'true' : 'false' }};
+    const hasOldSelfie = {{ $user->foto_selfie_ktp ? 'true' : 'false' }};
+    const hasOldSim = {{ $user->foto_sim ? 'true' : 'false' }};
+    
+    // Validasi KTP
+    if (!hasOldKtp && !fotoKtp.files.length) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dokumen Belum Lengkap!',
+            text: 'Foto KTP wajib diupload',
+            confirmButtonColor: '#2563eb'
+        });
+        return false;
+    }
+    
+    // Validasi Selfie KTP
+    if (!hasOldSelfie && !fotoSelfie.files.length) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dokumen Belum Lengkap!',
+            text: 'Foto Selfie dengan KTP wajib diupload',
+            confirmButtonColor: '#2563eb'
+        });
+        return false;
+    }
+    
+    // Validasi SIM
+    if (!hasOldSim && !fotoSim.files.length) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dokumen Belum Lengkap!',
+            text: 'Foto SIM wajib diupload',
+            confirmButtonColor: '#2563eb'
+        });
+        return false;
+    }
+});
 </script>
 @endsection

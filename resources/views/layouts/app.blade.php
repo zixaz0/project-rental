@@ -69,6 +69,14 @@
                                     </a>
                                     <hr class="my-2">
                                 @endif
+
+                                <!-- Menu Kembali ke Dashboard (Khusus Owner) -->
+                                @if(auth()->user()->role === 'owner')
+                                    <a href="/owner/dashboard" class="block px-4 py-2 text-sm text-indigo-600 hover:bg-indigo-50 font-medium">
+                                        <i class="fas fa-home mr-2"></i> Kembali ke Dashboard
+                                    </a>
+                                    <hr class="my-2">
+                                @endif
                                 
                                 <button type="button" onclick="showProfile()"
                                     class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">

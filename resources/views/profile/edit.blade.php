@@ -138,7 +138,7 @@
                 </div>
             </div>
 
-            @if($user->hasCompleteProfile())
+            @if(true)
                 <!-- Data Identitas (Readonly) -->
                 <div class="mb-6 sm:mb-8">
                     <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-4 pb-2 border-b flex items-center gap-2">
@@ -282,10 +282,6 @@
             @endif
 
             <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-6 border-t">
-                <a href="{{ route('profile.show') }}" class="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center text-sm font-medium order-2 sm:order-1">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </a>
                 <div class="flex flex-col-reverse sm:flex-row gap-3 order-1 sm:order-2">
                     <a href="{{ route('profile.show') }}" class="w-full sm:w-auto px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center text-sm font-medium">
                         Batal

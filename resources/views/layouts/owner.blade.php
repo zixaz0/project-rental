@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Dashboard - NGABRIDE ONLINE')</title>
+    <title>@yield('title', 'Owner Dashboard - NGABRIDE ONLINE')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
@@ -108,7 +108,7 @@ window.addEventListener('resize', () => {
     }
 });">
 
-    <!-- Mobile Overlay - GANTI BAGIAN INI -->
+    <!-- Mobile Overlay -->
     <div x-show="mobileMenuOpen" x-transition:enter="transition-opacity ease-linear duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
@@ -143,58 +143,14 @@ window.addEventListener('resize', () => {
         <!-- Navigation Menu -->
         <nav class="flex-1 mt-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
             <!-- Dashboard -->
-            <a href="{{ route('admin.dashboard') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+            <a href="{{ route('owner.dashboard') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('owner.dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
                 :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
                 style="transition: all 0.2s ease;">
                 <i class="fas fa-house text-lg"></i>
                 <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
                     class="ml-3 font-medium text-sm whitespace-nowrap">Dashboard</span>
                 <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Dashboard</span>
-            </a>
-
-            <!-- Kendaraan -->
-            <a href="{{ route('admin.kendaraan.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.kendaraan.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-car text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Kendaraan</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kendaraan</span>
-            </a>
-
-            <!-- Kategori -->
-            <a href="{{ route('admin.kategori.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.kategori.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-tags text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Kategori</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kategori</span>
-            </a>
-
-            <!-- Harga -->
-            <a href="{{ route('admin.harga.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.harga.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-dollar text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Harga</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Harga</span>
-            </a>
-
-            <!-- Users -->
-            <a href="{{ route('admin.users.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
-                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.users.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
-                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
-                style="transition: all 0.2s ease;">
-                <i class="fas fa-users text-lg"></i>
-                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
-                    class="ml-3 font-medium text-sm whitespace-nowrap">Kelola User</span>
-                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kelola User</span>
             </a>
         </nav>
 
@@ -260,10 +216,10 @@ window.addEventListener('resize', () => {
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
                             class="flex items-center gap-2 focus:outline-none hover:bg-gray-100 rounded-lg px-2 py-1 transition-colors cursor-pointer">
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name ?? 'Admin' }}&background=6366f1&color=fff"
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name ?? 'Owner' }}&background=6366f1&color=fff"
                                 alt="avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-gray-200">
                             <span
-                                class="hidden sm:inline text-sm font-medium text-gray-700">{{ auth()->user()->name ?? 'Admin' }}</span>
+                                class="hidden sm:inline text-sm font-medium text-gray-700">{{ auth()->user()->name ?? 'Owner' }}</span>
                             <i class="fas fa-chevron-down text-xs text-gray-500 transition-transform duration-200"
                                 :class="open ? 'rotate-180' : ''"></i>
                         </button>
@@ -279,10 +235,13 @@ window.addEventListener('resize', () => {
 
                             <!-- User Info -->
                             <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-sm font-semibold text-gray-800">{{ auth()->user()->name ?? 'Admin' }}
+                                <p class="text-sm font-semibold text-gray-800">{{ auth()->user()->name ?? 'Owner' }}
                                 </p>
                                 <p class="text-xs text-gray-500 mt-0.5 truncate">
-                                    {{ auth()->user()->email ?? 'admin@ngabride.com' }}</p>
+                                    {{ auth()->user()->email ?? 'owner@ngabride.com' }}</p>
+                                <span class="inline-block mt-2 px-2 py-1 text-xs font-semibold text-indigo-700 bg-indigo-100 rounded-full">
+                                    Owner
+                                </span>
                             </div>
 
                             <!-- Profile Button -->
@@ -406,7 +365,7 @@ window.addEventListener('resize', () => {
                     <div class="flex flex-col items-center space-y-6 py-4">
                         <!-- Avatar -->
                         <div class="relative">
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name ?? 'Admin' }}&background=6366f1&color=fff&size=150"
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name ?? 'Owner' }}&background=6366f1&color=fff&size=150"
                                 alt="avatar" class="w-32 h-32 rounded-full shadow-2xl border-4 border-indigo-100">
                             <div class="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
                         </div>
@@ -417,7 +376,7 @@ window.addEventListener('resize', () => {
                                 <i class="fas fa-user text-indigo-600 text-lg"></i>
                                 <div class="text-left flex-1">
                                     <p class="text-xs text-gray-500 font-medium">Nama Lengkap</p>
-                                    <p class="font-bold text-gray-800 text-base">{{ auth()->user()->name ?? 'Admin' }}</p>
+                                    <p class="font-bold text-gray-800 text-base">{{ auth()->user()->name ?? 'Owner' }}</p>
                                 </div>
                             </div>
                             
@@ -425,7 +384,7 @@ window.addEventListener('resize', () => {
                                 <i class="fas fa-envelope text-indigo-600 text-lg"></i>
                                 <div class="text-left flex-1">
                                     <p class="text-xs text-gray-500 font-medium">Email</p>
-                                    <p class="font-bold text-gray-800 text-base">{{ auth()->user()->email ?? 'admin@ngabride.com' }}</p>
+                                    <p class="font-bold text-gray-800 text-base">{{ auth()->user()->email ?? 'owner@ngabride.com' }}</p>
                                 </div>
                             </div>
                             
@@ -433,7 +392,7 @@ window.addEventListener('resize', () => {
                                 <i class="fas fa-id-badge text-indigo-600 text-lg"></i>
                                 <div class="text-left flex-1">
                                     <p class="text-xs text-gray-500 font-medium">Role</p>
-                                    <p class="font-bold text-gray-800 text-base">{{ auth()->user()->role ?? 'Admin' }}</p>
+                                    <p class="font-bold text-gray-800 text-base">Owner</p>
                                 </div>
                             </div>
                         </div>
@@ -455,27 +414,6 @@ window.addEventListener('resize', () => {
                 }
             });
         }
-    </script>
-    <script>
-        @if (session('success'))
-            Swal.fire({
-                title: 'Berhasil!',
-                text: @json(session('success')),
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            });
-        @endif
-
-        @if (session('error'))
-            Swal.fire({
-                title: 'Gagal!',
-                text: @json(session('error')),
-                icon: 'error',
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'OK'
-            });
-        @endif
     </script>
 
     @stack('scripts')
