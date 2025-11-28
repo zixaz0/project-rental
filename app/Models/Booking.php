@@ -21,7 +21,6 @@ class Booking extends Model
         'durasi',
         'harga_per_hari',
         'total_harga',
-        'alamat_penjemputan',
         'catatan',
         'metode_pembayaran',
         'status',
@@ -47,6 +46,11 @@ class Booking extends Model
     public function kendaraan()
     {
         return $this->belongsTo(Kendaraan::class);
+    }
+    
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
     }
 
     // Accessor untuk status badge

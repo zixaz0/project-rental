@@ -196,6 +196,17 @@ window.addEventListener('resize', () => {
                     class="ml-3 font-medium text-sm whitespace-nowrap">Kelola User</span>
                 <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kelola User</span>
             </a>
+
+            <!-- Bookings -->
+            <a href="{{ route('admin.bookings.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.bookings.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
+                style="transition: all 0.2s ease;">
+                <i class="fas fa-bookmark text-lg"></i>
+                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
+                    class="ml-3 font-medium text-sm whitespace-nowrap">Kelola Booking</span>
+                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kelola Booking</span>
+            </a>
         </nav>
 
         <!-- Logout Button (Bottom of Sidebar) -->

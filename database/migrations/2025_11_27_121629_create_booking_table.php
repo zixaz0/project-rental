@@ -28,7 +28,6 @@ return new class extends Migration
             $table->decimal('total_harga', 10, 2);
             
             // Detail Penjemputan
-            $table->text('alamat_penjemputan');
             $table->text('catatan')->nullable();
             
             // Pembayaran

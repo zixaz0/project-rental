@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'Manajemen User - Admin')
-@section('page-title', 'Manajemen User')
+@section('title', 'Kelola User - Admin')
+@section('page-title', 'Kelola User')
 @section('page-subtitle', 'Kelola dan verifikasi data customer')
 
 @section('content')

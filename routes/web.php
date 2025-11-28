@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Admin\AdminBookingController;
 
 // ============================================================================
 // PUBLIC ROUTES
@@ -22,7 +23,11 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/booking/{kendaraan}', [BookingController::class, 'show'])->name('booking.show');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking-success/{booking}', [BookingController::class, 'success'])->name('booking.success');
-Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('booking.my-bookings');
+Route::middleware('auth')->group(function() {
+    Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('booking.my-bookings');
+    Route::get('/booking/{booking}/detail', [BookingController::class, 'detail'])->name('booking.detail');
+    Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+});
 
 // ============================================================================
 // AUTHENTICATION ROUTES (Guest Only)
@@ -116,6 +121,14 @@ Route::prefix('admin')
         Route::get('users/verification-requests', [UserController::class, 'verificationRequests'])->name('users.verification-requests');
         Route::post('users/bulk-verify', [UserController::class, 'bulkVerify'])->name('users.bulk-verify');
         Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+
+      // Booking Management
+        Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
+        Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::post('/bookings/{booking}/start-trip', [AdminBookingController::class, 'startTrip'])->name('bookings.start-trip');
+        Route::post('/bookings/{booking}/complete', [AdminBookingController::class, 'complete'])->name('bookings.complete');
+        Route::post('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('bookings.cancel');
     });
 
 

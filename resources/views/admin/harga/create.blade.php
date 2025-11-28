@@ -135,15 +135,6 @@
                         <option value="tersedia" {{ old('status') == 'tersedia' ? 'selected' : '' }}>
                             🟢 Tersedia
                         </option>
-                        <option value="tidak_tersedia" {{ old('status') == 'tidak_tersedia' ? 'selected' : '' }}>
-                            🔴 Tidak Tersedia
-                        </option>
-                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>
-                            🟡 Pending
-                        </option>
-                        <option value="disewa" {{ old('status') == 'disewa' ? 'selected' : '' }}>
-                            🔵 Disewa
-                        </option>
                     </select>
                     @error('status')
                         <p class="mt-2 text-sm text-red-600">

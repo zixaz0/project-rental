@@ -172,7 +172,7 @@
                                                     </div>
                                                     <div class="text-sm text-gray-600">/ Hari</div>
                                                     <button type="button" onclick="checkUserStatus({{ $kendaraan->id }})"
-                                                        class="mt-4 inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-lg">
+                                                        class="cursor-pointer mt-4 inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-lg">
                                                         Pesan
                                                     </button>
                                                 </div>

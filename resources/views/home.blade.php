@@ -339,7 +339,7 @@
                 // Check closed hours first
                 if (hour >= 23 || hour < 5) {
                     alertBox.classList.remove('hidden');
-                    alertMessage.textContent = '⚠️ Rental tutup dari jam 23:00 - 05:00. Pilih jam 05:00 - 22:59.';
+                    alertMessage.textContent = 'Maaf, Rental tutup dari jam 23:00 - 05:00. Pilih jam 05:00 - 22:59.';
                     return;
                 }
 

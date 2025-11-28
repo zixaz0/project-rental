@@ -50,6 +50,7 @@ class BookingController extends Controller
             'totalHarga'
         ));
     }
+    
     // Proses booking
     public function store(Request $request)
     {
@@ -58,7 +59,6 @@ class BookingController extends Controller
             'tanggal_mulai' => 'required|date|after_or_equal:today',
             'jam_mulai' => 'required',
             'durasi' => 'required|integer|min:1',
-            'alamat_penjemputan' => 'required|string|max:500',
             'metode_pembayaran' => 'required|in:transfer,cash',
             'catatan' => 'nullable|string|max:500'
         ]);
@@ -103,7 +103,7 @@ class BookingController extends Controller
                 return back()->with('error', 'Maaf, kendaraan sudah dibooking untuk tanggal tersebut.');
             }
 
-            // Buat booking
+            // Buat booking tanpa alamat penjemputan
             $booking = Booking::create([
                 'nomor_booking' => $nomorBooking,
                 'user_id' => Auth::id(),
@@ -114,7 +114,6 @@ class BookingController extends Controller
                 'durasi' => $request->durasi,
                 'harga_per_hari' => $hargaPerHari,
                 'total_harga' => $totalHarga,
-                'alamat_penjemputan' => $request->alamat_penjemputan,
                 'catatan' => $request->catatan,
                 'metode_pembayaran' => $request->metode_pembayaran,
                 'status' => 'pending',
@@ -129,7 +128,7 @@ class BookingController extends Controller
             DB::commit();
 
             return redirect()->route('booking.success', $booking->id)
-                ->with('success', 'Booking berhasil dibuat! Silakan datang ke tempat rental untuk pembayaran.');
+                ->with('success', 'Booking berhasil dibuat! Silakan datang ke tempat rental untuk pengambilan kendaraan.');
 
         } catch (\Exception $e) {
             DB::rollBack();
