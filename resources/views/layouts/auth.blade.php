@@ -18,43 +18,30 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
-                <div class="flex items-center space-x-6">
-                    <a href="/" class="flex items-center flex-shrink-0">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2">
                         <img src="{{ asset('images/logo.png') }}" alt="NGABRIDE ONLINE Logo"
-                            class="h-10 w-auto">
+                            class="h-12 sm:h-16 md:h-20 w-auto">
                     </a>
-
-                    <!-- Desktop Navigation Menu - Muncul di layar sedang ke atas -->
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-indigo-600 font-medium text-sm transition whitespace-nowrap {{ request()->is('/') ? 'text-indigo-600' : '' }}">
-                            Home
-                        </a>
-                        <a href="{{ route('harga-rental') }}" class="text-gray-700 hover:text-indigo-600 font-medium text-sm transition whitespace-nowrap {{ request()->is('harga-rental') ? 'text-indigo-600' : '' }}">
-                            Harga Rental
-                        </a>
-                        <a href="{{ route('profile-rental') }}" class="text-gray-700 hover:text-indigo-600 font-medium text-sm transition whitespace-nowrap {{ request()->is('profile-rental') ? 'text-indigo-600' : '' }}">
-                            Profile Rental
-                        </a>
-                        <a href="{{ route('kontak') }}" class="text-gray-700 hover:text-indigo-600 font-medium text-sm transition whitespace-nowrap {{ request()->is('kontak') ? 'text-indigo-600' : '' }}">
-                            Kontak
-                        </a>
-                    </div>
                 </div>
 
-                <!-- Desktop Right Side - Auth Buttons & User Menu -->
+                <!-- Desktop Right Side -->
                 <div class="hidden md:flex items-center space-x-3">
                     @guest
                         <a href="/login"
-                            class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium transition whitespace-nowrap">
+                            class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium transition">
                             Masuk
                         </a>
                         <a href="/register"
-                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium transition whitespace-nowrap">
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium transition">
                             Daftar
                         </a>
                     @endguest
 
                     @auth
+                        <button class="text-gray-700 hover:text-indigo-600 p-2">
+                            <i class="fas fa-globe"></i>
+                        </button>
                         <button class="text-gray-700 hover:text-indigo-600 p-2">
                             <i class="far fa-bell"></i>
                         </button>
@@ -68,14 +55,11 @@
                                 <i class="fas fa-chevron-down text-xs"></i>
                             </button>
 
-                            <!-- Dropdown Menu -->
-                            <div x-show="open" 
-                                x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 scale-95" 
-                                x-transition:enter-end="opacity-100 scale-100"
+                            <!-- Dropdown -->
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                                 x-transition:leave="transition ease-in duration-150"
-                                x-transition:leave-start="opacity-100 scale-100" 
-                                x-transition:leave-end="opacity-0 scale-95"
+                                x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                                 @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-50">
 
@@ -118,7 +102,7 @@
                     @endauth
                 </div>
 
-                <!-- Mobile Right Side - Auth Buttons & Hamburger -->
+                <!-- Mobile Right Side -->
                 <div class="flex md:hidden items-center space-x-2">
                     @guest
                         <a href="/login"
@@ -133,53 +117,40 @@
 
                     @auth
                         <button class="text-gray-700 hover:text-indigo-600 p-2">
-                            <i class="far fa-bell text-lg"></i>
+                            <i class="far fa-bell"></i>
+                        </button>
+                        <button id="mobile-menu-btn"
+                            class="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-gray-50">
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=4f46e5&color=fff"
+                                class="w-8 h-8 rounded-full">
+                            <i class="fas fa-chevron-down text-xs text-gray-700"></i>
                         </button>
                     @endauth
-
-                    <!-- Hamburger Button -->
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-indigo-600 p-2">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
                 </div>
             </div>
 
-            <!-- Mobile Menu -->
+            <!-- Mobile Menu (Only for authenticated users) -->
             <div id="mobile-menu" class="hidden md:hidden pb-4 border-t">
                 <div class="flex flex-col space-y-2 pt-4">
-                    <!-- Navigation Links -->
-                    <a href="/" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm {{ request()->is('/') ? 'bg-indigo-50 text-indigo-600 font-medium' : '' }}">
-                        <i class="fas fa-home mr-2"></i> Home
-                    </a>
-                    <a href="{{ route('harga-rental') }}" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm {{ request()->is('harga-rental') ? 'bg-indigo-50 text-indigo-600 font-medium' : '' }}">
-                        <i class="fas fa-tags mr-2"></i> Harga Rental
-                    </a>
-                    <a href="{{ route('profile-rental') }}" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm {{ request()->is('profile-rental') ? 'bg-indigo-50 text-indigo-600 font-medium' : '' }}">
-                        <i class="fas fa-building mr-2"></i> Profile Rental
-                    </a>
-                    <a href="{{ route('kontak') }}" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm {{ request()->is('kontak') ? 'bg-indigo-50 text-indigo-600 font-medium' : '' }}">
-                        <i class="fas fa-envelope mr-2"></i> Kontak
-                    </a>
-
                     @auth
-                        <hr class="my-2">
-                        
-                        <!-- Dashboard Links for Admin/Owner -->
+                        <!-- Menu Kembali ke Dashboard (Khusus Admin di Mobile) -->
                         @if (auth()->user()->role === 'admin')
                             <a href="/admin/dashboard"
                                 class="text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg text-sm font-medium">
-                                <i class="fas fa-gauge mr-2"></i> Dashboard Admin
+                                <i class="fas fa-gauge mr-2"></i> Kembali ke Dashboard
                             </a>
+                            <hr class="my-2">
                         @endif
 
+                        <!-- Menu Kembali ke Dashboard (Khusus Owner di Mobile) -->
                         @if (auth()->user()->role === 'owner')
                             <a href="/owner/dashboard"
                                 class="text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg text-sm font-medium">
-                                <i class="fas fa-gauge mr-2"></i> Dashboard Owner
+                                <i class="fas fa-gauge mr-2"></i> Kembali ke Dashboard
                             </a>
+                            <hr class="my-2">
                         @endif
 
-                        <!-- User Menu Items -->
                         <a href="/profile" class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm">
                             <i class="fas fa-user mr-2"></i> Profil
                         </a>
@@ -187,10 +158,7 @@
                             class="text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm">
                             <i class="fas fa-car mr-2"></i> Pesanan Saya
                         </a>
-                        
                         <hr class="my-2">
-                        
-                        <!-- Logout -->
                         <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="button"

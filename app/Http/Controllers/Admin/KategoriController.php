@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class KategoriController extends Controller
 {
@@ -34,13 +35,21 @@ class KategoriController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'jenis' => 'required|string|max:500|unique:kategori,jenis',
+            'jenis' => [
+                'required',
+                'string',
+                'max:500',
+                // Jenis hanya harus unique untuk kombinasi nama + jenis yang sama
+                Rule::unique('kategori')->where(function ($query) use ($request) {
+                    return $query->where('nama', $request->nama);
+                })
+            ],
         ], [
             'nama.required' => 'Nama kategori wajib diisi',
             'nama.max' => 'Nama kategori maksimal 100 karakter',
             'jenis.required' => 'Jenis kategori wajib diisi',
             'jenis.max' => 'Jenis maksimal 500 karakter',
-            'jenis.unique' => 'Jenis kategori sudah terdaftar',
+            'jenis.unique' => 'Jenis kategori sudah terdaftar untuk kategori ini',
         ]);
 
         try {
@@ -80,13 +89,23 @@ class KategoriController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'jenis' => 'required|string|max:500|unique:kategori,jenis,' . $kategori->id,
+            'jenis' => [
+                'required',
+                'string',
+                'max:500',
+                // Jenis hanya harus unique untuk kombinasi nama + jenis yang sama, kecuali untuk record ini sendiri
+                Rule::unique('kategori')
+                    ->where(function ($query) use ($request) {
+                        return $query->where('nama', $request->nama);
+                    })
+                    ->ignore($kategori->id)
+            ],
         ], [
             'nama.required' => 'Nama kategori wajib diisi',
             'nama.max' => 'Nama kategori maksimal 100 karakter',
             'jenis.required' => 'Jenis kategori wajib diisi',
             'jenis.max' => 'Jenis maksimal 500 karakter',
-            'jenis.unique' => 'Jenis kategori sudah terdaftar',
+            'jenis.unique' => 'Jenis kategori sudah terdaftar untuk kategori ini',
         ]);
 
         try {

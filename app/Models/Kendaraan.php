@@ -40,4 +40,22 @@ class Kendaraan extends Model
     {
         return $this->hasOne(Harga::class);
     }
+
+    // Relasi ke Bookings
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    // Accessor untuk nama mobil lengkap
+    public function getNamaMobilAttribute()
+    {
+        return "{$this->merk} {$this->model}";
+    }
+
+    // Accessor untuk nama mobil dengan tahun
+    public function getNamaMobilLengkapAttribute()
+    {
+        return "{$this->merk} {$this->model} ({$this->tahun})";
+    }
 }

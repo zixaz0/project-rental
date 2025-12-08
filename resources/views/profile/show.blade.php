@@ -7,7 +7,7 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Button Kembali -->
         <div class="mb-4">
-            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-100 border border-gray-300 transition shadow-sm">
+            <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-100 border border-gray-300 transition shadow-sm">
                 <i class="fas fa-arrow-left"></i>
                 <span class="font-medium">Kembali</span>
             </a>
@@ -276,12 +276,9 @@
                             Foto KTP
                         </label>
                         @if($user->foto_ktp)
-                            <div class="relative group cursor-pointer" onclick="openPreview('{{ asset($user->foto_ktp) }}', 'Foto KTP')">
-                                <img src="{{ asset($user->foto_ktp) }}" alt="KTP" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 group-hover:border-indigo-500 transition" onerror="this.src='{{ asset($user->foto_ktp) }}'">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition flex items-center justify-center">
-                                    <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition"></i>
-                                </div>
-                            </div>
+                            <a href="{{ asset( $user->foto_ktp) }}" target="_blank" class="block">
+                                <img src="{{ asset($user->foto_ktp) }}" alt="KTP" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 hover:border-indigo-500 hover:opacity-75 transition" onerror="this.src='{{ asset($user->foto_ktp) }}'">
+                            </a>
                         @else
                             <div class="w-full h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center">
                                 <i class="fas fa-image text-gray-300 text-2xl sm:text-3xl mb-2"></i>
@@ -297,12 +294,9 @@
                             Selfie + KTP
                         </label>
                         @if($user->foto_selfie_ktp)
-                            <div class="relative group cursor-pointer" onclick="openPreview('{{ asset($user->foto_selfie_ktp) }}', 'Selfie + KTP')">
-                                <img src="{{ asset($user->foto_selfie_ktp) }}" alt="Selfie" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 group-hover:border-indigo-500 transition" onerror="this.src='{{ asset($user->foto_selfie_ktp) }}'">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition flex items-center justify-center">
-                                    <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition"></i>
-                                </div>
-                            </div>
+                            <a href="{{ asset($user->foto_selfie_ktp) }}" target="_blank" class="block">
+                                <img src="{{ asset($user->foto_selfie_ktp) }}" alt="Selfie" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 hover:border-indigo-500 hover:opacity-75 transition" onerror="this.src='{{ asset($user->foto_selfie_ktp) }}'">
+                            </a>
                         @else
                             <div class="w-full h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center">
                                 <i class="fas fa-image text-gray-300 text-2xl sm:text-3xl mb-2"></i>
@@ -318,12 +312,9 @@
                             Foto SIM
                         </label>
                         @if($user->foto_sim)
-                            <div class="relative group cursor-pointer" onclick="openPreview('{{ asset($user->foto_sim) }}', 'Foto SIM')">
-                                <img src="{{ asset($user->foto_sim) }}" alt="SIM" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 group-hover:border-indigo-500 transition" onerror="this.src='{{ asset($user->foto_sim) }}'">
-                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-lg transition flex items-center justify-center">
-                                    <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition"></i>
-                                </div>
-                            </div>
+                            <a href="{{ asset( $user->foto_sim) }}" target="_blank" class="block">
+                                <img src="{{ asset( $user->foto_sim) }}" alt="SIM" class="w-full h-40 object-cover rounded-lg border-2 border-gray-200 hover:border-indigo-500 hover:opacity-75 transition" onerror="this.src='{{ asset($user->foto_sim) }}'">
+                            </a>
                         @else
                             <div class="w-full h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center">
                                 <i class="fas fa-image text-gray-300 text-2xl sm:text-3xl mb-2"></i>
@@ -366,98 +357,4 @@
         @endif
     </div>
 </div>
-
-<!-- Modal Preview Gambar - Enhanced Design -->
-<div id="imagePreviewModal" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 backdrop-blur-sm" onclick="closePreview()">
-    <div class="relative w-full h-full flex items-center justify-center p-4 sm:p-8" onclick="event.stopPropagation()">
-        
-        <!-- Header Bar -->
-        <div class="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent p-4 sm:p-6 z-10">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="bg-indigo-600 rounded-lg p-2">
-                        <i class="fas fa-image text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 id="previewTitle" class="text-white text-lg sm:text-xl font-bold"></h3>
-                        <p class="text-gray-300 text-xs sm:text-sm">Klik di luar gambar untuk menutup</p>
-                    </div>
-                </div>
-                <button onclick="closePreview()" class="bg-red-600 hover:bg-red-700 text-white rounded-full p-3 transition transform hover:scale-110 shadow-lg">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Image Container with Better Styling -->
-        <div class="relative max-w-6xl w-full h-full flex items-center justify-center py-20 sm:py-24">
-            <div class="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-h-full max-w-full">
-                <!-- Loading Spinner -->
-                <div id="imageLoader" class="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <div class="text-center">
-                        <i class="fas fa-spinner fa-spin text-indigo-600 text-4xl mb-3"></i>
-                        <p class="text-gray-600 text-sm">Memuat gambar...</p>
-                    </div>
-                </div>
-                
-                <!-- Actual Image -->
-                <img id="previewImage" 
-                     src="" 
-                     alt="Preview" 
-                     class="max-w-full max-h-[70vh] sm:max-h-[75vh] w-auto h-auto object-contain rounded-xl"
-                     onload="document.getElementById('imageLoader').classList.add('hidden')"
-                     style="display: block; margin: auto;">
-            </div>
-        </div>
-
-        <!-- Footer Bar with Actions -->
-        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 z-10">
-            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a id="downloadLink" 
-                   href="" 
-                   download 
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl transition shadow-xl transform hover:scale-105 font-semibold">
-                    <i class="fas fa-download"></i>
-                    <span>Download Gambar</span>
-                </a>
-                
-                <button onclick="closePreview()" 
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-xl transition shadow-xl font-semibold">
-                    <i class="fas fa-times"></i>
-                    <span>Tutup</span>
-                </button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-function openPreview(imageUrl, title) {
-    const modal = document.getElementById('imagePreviewModal');
-    const previewImage = document.getElementById('previewImage');
-    const previewTitle = document.getElementById('previewTitle');
-    const downloadLink = document.getElementById('downloadLink');
-    
-    previewImage.src = imageUrl;
-    previewTitle.textContent = title;
-    downloadLink.href = imageUrl;
-    
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closePreview() {
-    const modal = document.getElementById('imagePreviewModal');
-    modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-// Close on ESC key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closePreview();
-    }
-});
-</script>
 @endsection

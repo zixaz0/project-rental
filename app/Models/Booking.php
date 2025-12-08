@@ -47,7 +47,13 @@ class Booking extends Model
     {
         return $this->belongsTo(Kendaraan::class);
     }
-    
+
+    // Alias untuk kendaraan -> mobil (TAMBAHAN INI)
+    public function mobil()
+    {
+        return $this->belongsTo(Kendaraan::class, 'kendaraan_id');
+    }
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -77,5 +83,11 @@ class Booking extends Model
         ];
 
         return $badges[$this->status_pembayaran] ?? $this->status_pembayaran;
+    }
+
+    // Accessor untuk kode booking (alias nomor_booking)
+    public function getKodeBookingAttribute()
+    {
+        return $this->nomor_booking;
     }
 }

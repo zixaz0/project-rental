@@ -140,7 +140,6 @@ window.addEventListener('resize', () => {
             </div>
         </div>
 
-        <!-- Navigation Menu -->
         <nav class="flex-1 mt-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
             <!-- Dashboard -->
             <a href="{{ route('admin.dashboard') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
@@ -206,6 +205,17 @@ window.addEventListener('resize', () => {
                 <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
                     class="ml-3 font-medium text-sm whitespace-nowrap">Kelola Booking</span>
                 <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Kelola Booking</span>
+            </a>
+
+            <!-- Riwayat Pesanan (BARU) -->
+            <a href="{{ route('admin.riwayat-pesanan.index') }}" @click="window.innerWidth < 768 && closeMobileMenu()"
+                class="nav-tooltip flex items-center rounded-lg group relative {{ request()->routeIs('admin.riwayat-pesanan.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                :class="(sidebarOpen || mobileMenuOpen) ? 'px-4 py-3' : 'px-4 py-3 justify-center'"
+                style="transition: all 0.2s ease;">
+                <i class="fas fa-file-invoice-dollar text-lg"></i>
+                <span x-show="sidebarOpen || mobileMenuOpen" x-cloak x-transition
+                    class="ml-3 font-medium text-sm whitespace-nowrap">Riwayat Pesanan</span>
+                <span x-show="!sidebarOpen && !mobileMenuOpen" class="tooltip-content">Riwayat Pesanan</span>
             </a>
         </nav>
 

@@ -1,9 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 @section('title', 'Register - NGABRIDE ONLINE')
 @section('content')
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <!-- Background dengan Gradient yang Sama seperti Home -->
 <div class="relative bg-gradient-to-br from-indigo-400 to-indigo-600 min-h-screen flex items-center justify-center py-16 px-4">
     <!-- Background Image dengan Overlay (sama seperti home) -->

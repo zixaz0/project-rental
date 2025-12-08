@@ -14,11 +14,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Owner\OwnerDashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\Admin\RiwayatPesananController;
 
 // ============================================================================
 // PUBLIC ROUTES
 // ============================================================================
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/harga-rental', function () {return view('harga-rental');})->name('harga-rental');
+Route::get('/profile-rental', function () {return view('profile-rental');})->name('profile-rental');
+Route::get('/kontak', function () {return view('kontak');})->name('kontak');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/booking/{kendaraan}', [BookingController::class, 'show'])->name('booking.show');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
@@ -122,13 +126,21 @@ Route::prefix('admin')
         Route::post('users/bulk-verify', [UserController::class, 'bulkVerify'])->name('users.bulk-verify');
         Route::get('users/export', [UserController::class, 'export'])->name('users.export');
 
-      // Booking Management
+        // Booking Management
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
         Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
         Route::post('/bookings/{booking}/start-trip', [AdminBookingController::class, 'startTrip'])->name('bookings.start-trip');
         Route::post('/bookings/{booking}/complete', [AdminBookingController::class, 'complete'])->name('bookings.complete');
         Route::post('/bookings/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('bookings.cancel');
+
+        // Riwayat Pesanan Management (TAMBAHAN BARU)
+        Route::prefix('riwayat-pesanan')->name('riwayat-pesanan.')->group(function () {
+            Route::get('/', [RiwayatPesananController::class, 'index'])->name('index');
+            Route::get('/{id}', [RiwayatPesananController::class, 'show'])->name('show');
+            Route::put('/{id}/update-status', [RiwayatPesananController::class, 'updateStatus'])->name('update-status');
+            Route::get('/{id}/export-pdf', [RiwayatPesananController::class, 'exportPdf'])->name('export-pdf');
+        });
     });
 
 

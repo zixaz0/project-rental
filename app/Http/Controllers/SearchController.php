@@ -21,6 +21,11 @@ class SearchController extends Controller
                 $q->where('status', 'tersedia');
             });
 
+        // Filter kategori
+        if ($request->has('kategori_id') && $request->kategori_id != '') {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+
         // Filter harga
         if ($request->has('harga_min')) {
             $query->whereHas('harga', function($q) use ($request) {
@@ -74,6 +79,9 @@ class SearchController extends Controller
         // Hitung total kendaraan
         $totalKendaraan = $kendaraans->count();
 
-        return view('search', compact('kendaraans', 'totalKendaraan', 'tanggal', 'jam', 'durasi'));
+        // Ambil kategori yang unik (tanpa duplikat) dan diurutkan berdasarkan nama
+        $kategoris = Kategori::orderBy('nama', 'asc')->get()->unique('nama');
+
+        return view('search', compact('kendaraans', 'totalKendaraan', 'tanggal', 'jam', 'durasi', 'kategoris'));
     }
 }
