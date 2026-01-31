@@ -43,17 +43,7 @@ class RiwayatPesananController extends Controller
 
         $invoices = $query->paginate(20);
 
-        // Statistik
-        $totalPendapatan = Invoice::where('status_pembayaran', 'lunas')->sum('total_invoice');
-        $totalPending = Invoice::where('status_pembayaran', 'pending')->sum('total_invoice');
-        $totalBelumBayar = Invoice::where('status_pembayaran', 'belum_bayar')->sum('total_invoice');
-
-        return view('admin.riwayat-pesanan.index', compact(
-            'invoices',
-            'totalPendapatan',
-            'totalPending',
-            'totalBelumBayar'
-        ));
+        return view('admin.riwayat-pesanan.index', compact('invoices'));
     }
 
     public function show($id)
@@ -62,24 +52,6 @@ class RiwayatPesananController extends Controller
             ->findOrFail($id);
 
         return view('admin.riwayat-pesanan.show', compact('invoice'));
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status_pembayaran' => 'required|in:pending,lunas,belum_bayar,dibatalkan'
-        ]);
-
-        $invoice = Invoice::findOrFail($id);
-        $invoice->status_pembayaran = $request->status_pembayaran;
-        
-        if ($request->status_pembayaran == 'lunas') {
-            $invoice->tanggal_pembayaran = now();
-        }
-        
-        $invoice->save();
-
-        return redirect()->back()->with('success', 'Status pembayaran berhasil diupdate!');
     }
 
     public function exportPdf($id)

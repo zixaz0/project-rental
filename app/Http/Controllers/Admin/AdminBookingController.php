@@ -24,15 +24,24 @@ class AdminBookingController extends Controller
         // Filter by status
         if ($request->has('status') && $request->status != 'all') {
             $query->where('status', $request->status);
+        } else {
+            // DEFAULT: Sembunyikan status "selesai" kecuali user memilih filter status tertentu
+            $query->whereNotIn('status', ['selesai']);
+        }
+
+        // Filter by tanggal
+        if ($request->has('tanggal') && $request->tanggal) {
+            $query->whereDate('tanggal_mulai', $request->tanggal);
         }
 
         // Search
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nomor_booking', 'like', "%{$search}%")
                   ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%");
+                      $userQuery->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
                   });
             });
         }
@@ -141,7 +150,7 @@ class AdminBookingController extends Controller
                 'biaya_tambahan' => $biayaTambahan,
                 'keterangan_biaya_tambahan' => $request->keterangan_biaya_tambahan,
                 'total_invoice' => $totalInvoice,
-                'status_pembayaran' => 'belum_bayar',
+                'status_pembayaran' => 'lunas',
                 'tanggal_jatuh_tempo' => Carbon::now()->addDays(7)
             ]);
 
@@ -155,7 +164,8 @@ class AdminBookingController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.bookings.show', $booking->id)
+            // Redirect ke halaman index setelah booking selesai
+            return redirect()->route('admin.bookings.index')
                 ->with('success', 'Booking selesai! Invoice telah dibuat. Status kendaraan dikembalikan ke TERSEDIA.');
 
         } catch (\Exception $e) {

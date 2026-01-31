@@ -257,7 +257,7 @@
             </div>
             <div class="border-t border-gray-800 pt-6 mt-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
-                    <p>&copy; 2024 NGABRIDE ONLINE. Logo dan Slogan dilindungi.</p>
+                    <p>&copy; 2025 NGABRIDE ONLINE. Logo dan Slogan dilindungi.</p>
                     <p class="mt-2 sm:mt-0">Made with <i class="fas fa-heart text-red-500"></i> in Indonesia</p>
                 </div>
             </div>

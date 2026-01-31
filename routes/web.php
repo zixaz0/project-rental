@@ -79,21 +79,6 @@ Route::prefix('owner')
     ->group(function () {
         // Dashboard Owner
         Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
-        
-        // Kendaraan Management (nanti bikin controllernya)
-        // Route::resource('vehicles', VehicleController::class);
-        
-        // Booking Management
-        // Route::resource('bookings', BookingController::class);
-        
-        // Customer Management
-        // Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
-        
-        // Reports
-        // Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-        
-        // Settings
-        // Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     });
 
 
@@ -138,7 +123,6 @@ Route::prefix('admin')
         Route::prefix('riwayat-pesanan')->name('riwayat-pesanan.')->group(function () {
             Route::get('/', [RiwayatPesananController::class, 'index'])->name('index');
             Route::get('/{id}', [RiwayatPesananController::class, 'show'])->name('show');
-            Route::put('/{id}/update-status', [RiwayatPesananController::class, 'updateStatus'])->name('update-status');
             Route::get('/{id}/export-pdf', [RiwayatPesananController::class, 'exportPdf'])->name('export-pdf');
         });
     });
